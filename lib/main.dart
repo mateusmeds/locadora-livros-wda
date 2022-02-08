@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/book_register_form.dart';
+import 'package:livraria_wda/components/book_rent_register_form.dart';
 import 'package:livraria_wda/components/publisher_register_form.dart';
 import 'package:livraria_wda/components/user_register_form.dart';
 
@@ -33,6 +34,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  ///Função responsável por abrir a modal
+  _openBookRentRegisterFormModal(BuildContext context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) {
+          return BookRentRegisterForm(context);
+        });
+  }
+
   ///Função responsável por abrir a modal
   _openBookRegisterFormModal(BuildContext context) {
     showModalBottomSheet(
@@ -88,6 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               onPressed: () => _openBookRegisterFormModal(context),
               child: Text("Form Livro"),
+            ),
+            TextButton(
+              onPressed: () => _openBookRentRegisterFormModal(context),
+              child: Text("Form Empréstimo de Livro"),
             ),
           ],
         ),
