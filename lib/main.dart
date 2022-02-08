@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/publisher_register_form.dart';
 import 'package:livraria_wda/components/user_register_form.dart';
 
 void main() {
@@ -32,8 +33,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   ///Função responsável por abrir a modal
+  _openPublisherRegisterFormModal(BuildContext context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) {
+          return PublisherRegisterForm();
+        });
+  }
+
+  ///Função responsável por abrir a modal
   _openUserRegisterFormModal(BuildContext context) {
     showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (ctx) {
           return UserRegisterForm();
@@ -57,6 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               onPressed: () => _openUserRegisterFormModal(context),
               child: Text("Form Usuário"),
+            ),
+            TextButton(
+              onPressed: () => _openPublisherRegisterFormModal(context),
+              child: Text("Form Editora"),
             ),
           ],
         ),
