@@ -11,6 +11,11 @@ class _PublisherRegisterFormState extends State<PublisherRegisterForm> {
   final nameController = TextEditingController();
   final cityController = TextEditingController();
 
+  ///Função responsável por fechar a modal
+  _closePublisherRegisterFormModal(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,7 +42,7 @@ class _PublisherRegisterFormState extends State<PublisherRegisterForm> {
           const SizedBox(height: 10),
           TextField(
             controller: cityController,
-            decoration: const  InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Cidade',
               suffixIcon: Icon(Icons.add),
             ),
@@ -48,7 +53,7 @@ class _PublisherRegisterFormState extends State<PublisherRegisterForm> {
             children: [
               //TODO: Adicionar evento de fechar a modal ao clicar em 'cancelar'
               TextButton(
-                  onPressed: () {},
+                  onPressed: () => _closePublisherRegisterFormModal(context),
                   child: Text('Cancelar'),
                   style: TextButton.styleFrom(primary: Colors.red[400])),
               ElevatedButton(
