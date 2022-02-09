@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/book_register_form.dart';
 import 'package:livraria_wda/components/book_rent_register_form.dart';
+import 'package:livraria_wda/components/menu_drawer.dart';
 import 'package:livraria_wda/components/publisher_register_form.dart';
 import 'package:livraria_wda/components/user_list.dart';
 import 'package:livraria_wda/components/user_register_form.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -109,6 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
             UserList(),
           ],
         ),
+      ),
+      drawer: Drawer(
+        child: MenuDrawer(),
       ),
     );
   }
