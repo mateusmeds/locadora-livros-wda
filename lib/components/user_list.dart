@@ -7,7 +7,14 @@ class UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<User> users = [
-      User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
+      User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
+          'Rua Teste, 363 gseg esg se gesg esg seg esg seg', 'Natal'),
+          User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
+          'Rua Teste, 363 gseg esg se gesg esg seg esg seg', 'Natal'),
+          User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
+          'Rua Teste, 363 gseg esg se gesg esg seg esg seg', 'Natal'),
+          User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
+          'Rua Teste, 363 gseg esg se gesg esg seg esg seg', 'Natal'),
       User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
       User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
       User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
@@ -61,14 +68,19 @@ class UserList extends StatelessWidget {
                               children: [
                                 const Icon(Icons.email_rounded),
                                 const SizedBox(width: 5),
-                                Text(user.email),
+                                Flexible(
+                                  child: Text(
+                                    user.email,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                               ],
                             ),
                             Row(
                               children: [
                                 const Icon(Icons.location_on),
                                 const SizedBox(width: 5),
-                                Text("${user.address}, ${user.city}"),
+                                Flexible(child: Text("${user.address}, ${user.city}",overflow: TextOverflow.ellipsis,)),
                               ],
                             ),
                           ],
