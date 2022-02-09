@@ -1,3 +1,5 @@
+import 'package:livraria_wda/models/publisher.dart';
+
 class Book {
   int _id;
   String _name;
