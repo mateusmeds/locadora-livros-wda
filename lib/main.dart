@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/book_register_form.dart';
 import 'package:livraria_wda/components/book_rent_register_form.dart';
 import 'package:livraria_wda/components/publisher_register_form.dart';
+import 'package:livraria_wda/components/user_list.dart';
 import 'package:livraria_wda/components/user_register_form.dart';
 
 void main() {
@@ -87,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextButton(
               onPressed: () => _openUserRegisterFormModal(context),
@@ -104,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => _openBookRentRegisterFormModal(context),
               child: Text("Form Empréstimo de Livro"),
             ),
+            UserList(),
           ],
         ),
       ),
