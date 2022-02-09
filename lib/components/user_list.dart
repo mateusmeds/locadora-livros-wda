@@ -16,7 +16,7 @@ class UserList extends StatelessWidget {
     ];
 
     return Container(
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.all(5),
       height: 400,
       child: ListView.builder(
           itemCount: users.length,
@@ -24,17 +24,21 @@ class UserList extends StatelessWidget {
             final user = users[index];
 
             return Container(
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: Container(
                 color: Colors.grey[300],
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
+                      margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
                       height: 100,
-                      child: const Icon(
-                        Icons.person,
-                        size: 60,
+                      child: const CircleAvatar(
+                        radius: 30,
+                        child: Icon(
+                          Icons.person,
+                          size: 50,
+                        ),
                       ),
                     ),
                     Flexible(
