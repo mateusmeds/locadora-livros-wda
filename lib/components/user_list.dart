@@ -68,7 +68,7 @@ class UserList extends StatelessWidget {
                               children: [
                                 const Icon(Icons.location_on),
                                 const SizedBox(width: 5),
-                                Text("${user.address} ${user.city}"),
+                                Text("${user.address}, ${user.city}"),
                               ],
                             ),
                           ],
