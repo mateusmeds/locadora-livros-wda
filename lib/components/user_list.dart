@@ -104,8 +104,8 @@ class UserList extends StatelessWidget {
                           );
                         },
                         child: const Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          size: 40,
+                          Icons.edit,
+                          size: 30,
                         ),
                       ),
                       //color: Colors.yellow,
