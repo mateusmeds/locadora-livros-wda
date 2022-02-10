@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/user_single.dart';
+import 'package:livraria_wda/components/users_home.dart';
 import 'package:livraria_wda/models/user.dart';
 
 class UserList extends StatelessWidget {
@@ -9,11 +11,11 @@ class UserList extends StatelessWidget {
     final List<User> users = [
       User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
           'Rua Teste, 363 gseg esg se gesg esg seg esg seg', 'Natal'),
-          User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
+      User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
           'Rua Teste, 363 gseg esg se gesg esg seg esg seg', 'Natal'),
-          User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
+      User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
           'Rua Teste, 363 gseg esg se gesg esg seg esg seg', 'Natal'),
-          User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
+      User(1, 'Mateus', 'mateus@mail.com hrdhrdhrd h drhdr hrdhdr hdh',
           'Rua Teste, 363 gseg esg se gesg esg seg esg seg', 'Natal'),
       User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
       User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
@@ -22,16 +24,14 @@ class UserList extends StatelessWidget {
       User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
     ];
 
-    return Container(
-      margin: EdgeInsets.all(5),
-      height: 400,
+    return Expanded(
       child: ListView.builder(
           itemCount: users.length,
           itemBuilder: (ctx, index) {
             final user = users[index];
 
-            return Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            return Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 2.0, right: 5.0, left: 5.0),
               child: Container(
                 color: Colors.grey[300],
                 child: Row(
@@ -80,7 +80,11 @@ class UserList extends StatelessWidget {
                               children: [
                                 const Icon(Icons.location_on),
                                 const SizedBox(width: 5),
-                                Flexible(child: Text("${user.address}, ${user.city}",overflow: TextOverflow.ellipsis,)),
+                                Flexible(
+                                    child: Text(
+                                  "${user.address}, ${user.city}",
+                                  overflow: TextOverflow.ellipsis,
+                                )),
                               ],
                             ),
                           ],
@@ -90,7 +94,15 @@ class UserList extends StatelessWidget {
                     Container(
                       //Alterar cor de ícone
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => UserSingle(
+                                title: 'WDA Livraria',
+                              ),
+                            ),
+                          );
+                        },
                         child: const Icon(
                           Icons.arrow_forward_ios_rounded,
                           size: 40,

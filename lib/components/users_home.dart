@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/menu_drawer.dart';
 import 'package:livraria_wda/components/user_list.dart';
 import 'package:livraria_wda/components/user_register_form.dart';
 
@@ -22,20 +21,13 @@ class UsersHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
-          actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _openUserRegisterFormModal(context),
-          )
-        ],
+        title: Text('Lista de usuários'),
+
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            UserList(),
-          ],
-        ),
+      body: Column(
+        children: [
+          UserList(),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openUserRegisterFormModal(context),
