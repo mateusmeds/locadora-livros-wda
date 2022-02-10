@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/user_list.dart';
+import 'package:livraria_wda/components/users_home.dart';
 
 class MenuDrawer extends StatelessWidget {
-  const MenuDrawer({Key? key}) : super(key: key);
+  final String title;
+
+  const MenuDrawer({required this.title, Key? key}) : super(key: key);
+
+  _openUsersListModal(BuildContext context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) {
+          return UserList();
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,48 +59,56 @@ class MenuDrawer extends StatelessWidget {
             title: Text("Usuários"),
             trailing: Icon(Icons.arrow_forward_ios_rounded),
             onTap: () {
-              debugPrint('toquei no drawer');
-              //Fecha o menu
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => UsersHome(title: title,),
+                ),
+              );
             },
           ),
         ),
         Container(
           color: Colors.grey[200],
           child: ListTile(
-            leading: Icon(Icons.person),
+            leading: Icon(Icons.my_library_books_rounded),
             title: Text("Editoras"),
             trailing: Icon(Icons.arrow_forward_ios_rounded),
             onTap: () {
-              debugPrint('toquei no drawer');
-              //Fecha o menu
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => UsersHome(title: title,),
+                ),
+              );
             },
           ),
         ),
         Container(
           color: Colors.grey[200],
           child: ListTile(
-            leading: Icon(Icons.person),
+            leading: Icon(Icons.menu_book_rounded),
             title: Text("Livros"),
             trailing: Icon(Icons.arrow_forward_ios_rounded),
             onTap: () {
-              debugPrint('toquei no drawer');
-              //Fecha o menu
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => UsersHome(title: title,),
+                ),
+              );
             },
           ),
         ),
         Container(
           color: Colors.grey[200],
           child: ListTile(
-            leading: Icon(Icons.person),
+            leading: Icon(Icons.attach_money_outlined),
             title: Text("Aluguéis"),
             trailing: Icon(Icons.arrow_forward_ios_rounded),
             onTap: () {
-              debugPrint('toquei no drawer');
-              //Fecha o menu
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => UsersHome(title: title,),
+                ),
+              );
             },
           ),
         )

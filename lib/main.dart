@@ -11,6 +11,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final String title = 'WDA Livraria';
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Livraria WDA'),
+      home: MyHomePage(title: title),
     );
   }
 }
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   final String title;
 
-  const MyHomePage({required this.title, Key? key}) : super(key: key);
+  MyHomePage({required this.title, Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -67,21 +68,6 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  ///Função responsável por abrir a modal
-  _openUserRegisterFormModal(BuildContext context) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) {
-          return UserRegisterForm();
-        });
-  }
-
-  ///Função responsável por fechar a modal
-  _closeUserRegisterFormModal(BuildContext context) {
-    Navigator.of(context).pop();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,30 +76,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextButton(
-              onPressed: () => _openUserRegisterFormModal(context),
-              child: Text("Form Usuário"),
-            ),
-            TextButton(
-              onPressed: () => _openPublisherRegisterFormModal(context),
-              child: Text("Form Editora"),
-            ),
-            TextButton(
-              onPressed: () => _openBookRegisterFormModal(context),
-              child: Text("Form Livro"),
-            ),
-            TextButton(
-              onPressed: () => _openBookRentRegisterFormModal(context),
-              child: Text("Form Empréstimo de Livro"),
-            ),
-            UserList(),
           ],
         ),
       ),
       drawer: Drawer(
-        child: MenuDrawer(),
+        child: MenuDrawer(title: widget.title,),
       ),
     );
   }
