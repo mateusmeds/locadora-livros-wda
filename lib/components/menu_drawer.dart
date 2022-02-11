@@ -3,9 +3,8 @@ import 'package:livraria_wda/components/user_list.dart';
 import 'package:livraria_wda/components/users_home.dart';
 
 class MenuDrawer extends StatelessWidget {
-  final String title;
 
-  const MenuDrawer({required this.title, Key? key}) : super(key: key);
+  const MenuDrawer({ Key? key}) : super(key: key);
 
   _openUsersListModal(BuildContext context) {
     showModalBottomSheet(
@@ -61,7 +60,7 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => UsersHome(title: title,),
+                  builder: (BuildContext context) => UsersHome(),
                 ),
               );
             },
@@ -76,7 +75,7 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => UsersHome(title: title,),
+                  builder: (BuildContext context) => UsersHome(),
                 ),
               );
             },
@@ -91,7 +90,7 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => UsersHome(title: title,),
+                  builder: (BuildContext context) => UsersHome(),
                 ),
               );
             },
@@ -106,7 +105,7 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => UsersHome(title: title,),
+                  builder: (BuildContext context) => UsersHome(),
                 ),
               );
             },

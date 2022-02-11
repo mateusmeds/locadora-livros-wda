@@ -71,6 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //só para a tela não ficar muito branca e confundir no navegador
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -81,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       drawer: Drawer(
-        child: MenuDrawer(title: widget.title,),
+        child: MenuDrawer(),
       ),
     );
   }

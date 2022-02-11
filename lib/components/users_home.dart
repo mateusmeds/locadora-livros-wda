@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/user_list.dart';
 import 'package:livraria_wda/components/user_register_form.dart';
 
-class UsersHome extends StatelessWidget {
-  final String title;
+import 'menu_drawer.dart';
 
-  const UsersHome({required this.title, Key? key}) : super(key: key);
+class UsersHome extends StatelessWidget {
+
+  const UsersHome({Key? key}) : super(key: key);
 
   ///Função responsável por abrir a modal
   _openUserRegisterFormModal(BuildContext context) {
@@ -31,7 +32,10 @@ class UsersHome extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openUserRegisterFormModal(context),
-        child: Icon(Icons.add),
+        child: Icon(Icons.person_add_alt_1, size: 30,)
+      ),
+            drawer: Drawer(
+        child: MenuDrawer(),
       ),
     );
   }
