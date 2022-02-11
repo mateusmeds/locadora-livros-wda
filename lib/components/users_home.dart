@@ -13,10 +13,13 @@ class UsersHome extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Lista de usuários'),
       ),
-      body: Column(
-        children: const [
-          UserList(),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 90),
+        child: Column(
+          children: const [
+            UserList(),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {

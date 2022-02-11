@@ -32,10 +32,21 @@ class UserList extends StatelessWidget {
             final user = users[index];
 
             return Padding(
+              //Padding na lista de usuários
               padding: const EdgeInsets.only(
-                  top: 8.0, bottom: 2.0, right: 5.0, left: 5.0),
+                top: 8.0,
+                bottom: 2.0,
+                right: 5.0,
+                left: 5.0,
+              ),
               child: Container(
-                color: Colors.grey[300],
+                //Padding no card
+                padding: EdgeInsets.only(top: 10),
+
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.grey[300],
+                ),
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -48,39 +59,44 @@ class UserList extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                        height: 100,
+                        margin: EdgeInsets.only(left: 10),
                         child: const CircleAvatar(
                           radius: 30,
                           child: Icon(
                             Icons.person,
-                            size: 50,
+                            size: 40,
                           ),
                         ),
                       ),
                       Flexible(
                         fit: FlexFit.tight,
                         child: Container(
-                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          padding: EdgeInsets.only(left: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 user.name,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600),
+                                style: const TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w600),
                               ),
+                              //Altura para dar espaço vertical entre o nome e o email
                               const SizedBox(
                                 height: 5,
                               ),
                               Row(
                                 children: [
-                                  const Icon(Icons.email_rounded),
+                                  const Icon(
+                                    Icons.email_rounded,
+                                    color: Colors.black54,
+                                  ),
+                                  //Largura para dar espaço entre o ícone e o texto do e-mail
                                   const SizedBox(width: 5),
                                   Flexible(
                                     child: Text(
                                       user.email,
                                       overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 16),
                                     ),
                                   ),
                                 ],
@@ -92,12 +108,17 @@ class UserList extends StatelessWidget {
                                     child: Container(
                                       child: Row(
                                         children: [
-                                          const Icon(Icons.location_on),
+                                          const Icon(
+                                            Icons.location_on,
+                                            color: Colors.black54,
+                                          ),
+                                          //Largura para dar espaço entre o ícone e o texto do endereço
                                           const SizedBox(width: 5),
                                           Flexible(
                                             child: Text(
                                               "${user.address}, ${user.city}",
                                               overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(fontSize: 16),
                                             ),
                                           ),
                                         ],
@@ -115,8 +136,8 @@ class UserList extends StatelessWidget {
                                     },
                                     child: const Icon(
                                       Icons.delete,
-                                      size: 30,
-                                      color: Colors.redAccent,
+                                      size: 25,
+                                      color: Colors.red,
                                     ),
                                   ),
                                 ],
