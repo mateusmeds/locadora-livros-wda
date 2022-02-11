@@ -38,35 +38,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  ///Função responsável por abrir a modal
-  _openBookRentRegisterFormModal(BuildContext context) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) {
-          return BookRentRegisterForm(context);
-        });
-  }
-
-  ///Função responsável por abrir a modal
-  _openBookRegisterFormModal(BuildContext context) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) {
-          return BookRegisterForm(context);
-        });
-  }
-
-  ///Função responsável por abrir a modal
-  _openPublisherRegisterFormModal(BuildContext context) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) {
-          return PublisherRegisterForm();
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      drawer: Drawer(
+      drawer: const Drawer(
         child: MenuDrawer(),
       ),
     );
