@@ -4,7 +4,7 @@ import 'package:livraria_wda/models/user.dart';
 class UserEditForm extends StatefulWidget {
   User user;
 
-  UserEditForm(this.user, {Key? key}) : super(key: key);
+  UserEditForm({required this.user, Key? key}) : super(key: key);
 
   @override
   _UserEditFormState createState() => _UserEditFormState();

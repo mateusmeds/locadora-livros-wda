@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/book_register_form.dart';
-import 'package:livraria_wda/components/book_rent_register_form.dart';
 import 'package:livraria_wda/components/menu_drawer.dart';
-import 'package:livraria_wda/components/publisher_register_form.dart';
-import 'package:livraria_wda/components/user_list.dart';
-import 'package:livraria_wda/components/user_register_form.dart';
 
 void main() {
   runApp(const MyApp());
