@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/models/user.dart';
 
 class UserSingle extends StatelessWidget {
-  final String title;
+  User user;
 
-  const UserSingle({required this.title, Key? key}) : super(key: key);
-
-  ///Função responsável por abrir a modal
-  // _openUserRegisterFormModal(BuildContext context) {
-  //   showModalBottomSheet(
-  //       isScrollControlled: true,
-  //       context: context,
-  //       builder: (ctx) {
-  //         return UserRegisterForm();
-  //       });
-  // }
+  UserSingle({required this.user, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text('Usuário'),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(
