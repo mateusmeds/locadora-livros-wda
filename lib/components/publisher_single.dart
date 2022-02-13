@@ -67,6 +67,7 @@ class PublisherSingle extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  //Quantidade de livros que a livraria tem dessa editora
                   Container(
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
