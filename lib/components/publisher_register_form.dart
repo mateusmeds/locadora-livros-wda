@@ -11,11 +11,6 @@ class _PublisherRegisterFormState extends State<PublisherRegisterForm> {
   final nameController = TextEditingController();
   final cityController = TextEditingController();
 
-  ///Função responsável por fechar a modal
-  _closePublisherRegisterFormModal(BuildContext context) {
-    Navigator.of(context).pop();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
