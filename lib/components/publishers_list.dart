@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/publisher_single.dart';
 import 'package:livraria_wda/main.dart';
 import 'package:livraria_wda/models/publisher.dart';
 
@@ -50,7 +51,7 @@ class PublishersList extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => MyHomePage(),
+                      builder: (BuildContext context) => PublisherSingle(publisher: publisher),
                     ),
                   );
                 },
