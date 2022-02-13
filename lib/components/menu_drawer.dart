@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/book_register_form.dart';
 import 'package:livraria_wda/components/book_rent_register_form.dart';
 import 'package:livraria_wda/components/publisher_register_form.dart';
+import 'package:livraria_wda/components/publishers_home.dart';
 import 'package:livraria_wda/components/users_home.dart';
 import 'package:livraria_wda/main.dart';
 
@@ -80,7 +81,7 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => const PublisherRegisterForm(),
+                  builder: (BuildContext context) => const PublishersHome(),
                 ),
               );
             },

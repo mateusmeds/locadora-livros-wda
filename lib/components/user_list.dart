@@ -74,7 +74,7 @@ class UserList extends StatelessWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     Row(
                       children: [
                         const Icon(
@@ -100,23 +100,7 @@ class UserList extends StatelessWidget {
                         const SizedBox(width: 5),
                         Expanded(
                           child: Text(
-                            user.address,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.location_city_rounded,
-                          color: Colors.black54,
-                        ),
-                        const SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            user.city,
+                            '${user.address}, ${user.city}',
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

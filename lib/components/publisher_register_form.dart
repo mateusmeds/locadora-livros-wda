@@ -29,12 +29,11 @@ class _PublisherRegisterFormState extends State<PublisherRegisterForm> {
                 size: 90,
               ),
               const SizedBox(height: 20),
-              //TODO: Alterar os ícones
               TextField(
                 controller: nameController,
                 decoration: const InputDecoration(
                   labelText: 'Nome',
-                  suffixIcon: Icon(Icons.add),
+                prefixIcon: Icon(Icons.my_library_books_rounded),
                 ),
               ),
               const SizedBox(height: 10),
@@ -42,7 +41,7 @@ class _PublisherRegisterFormState extends State<PublisherRegisterForm> {
                 controller: cityController,
                 decoration: const InputDecoration(
                   labelText: 'Cidade',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.location_city_rounded),
                 ),
               ),
             ],

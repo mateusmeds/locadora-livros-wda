@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/publisher_register_form.dart';
+import 'package:livraria_wda/components/publishers_list.dart';
 import 'package:livraria_wda/components/user_list.dart';
 import 'package:livraria_wda/components/user_register_form.dart';
 
 import 'menu_drawer.dart';
 
-class UsersHome extends StatelessWidget {
-  const UsersHome({Key? key}) : super(key: key);
+class PublishersHome extends StatelessWidget {
+  const PublishersHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de usuários'),
+        title: const Text('Lista de Editoras'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(bottom: 90),
         child: Column(
           children: const [
-            UserList(),
+            PublishersList(),
           ],
         ),
       ),
@@ -25,7 +27,7 @@ class UsersHome extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => const UserRegisterForm(),
+                builder: (BuildContext context) => const PublisherRegisterForm(),
               ),
             );
           },
