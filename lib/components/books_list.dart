@@ -15,7 +15,7 @@ class BooksList extends StatelessWidget {
           3, 1869, 0),
       Book(3, 'Thomas Mann', 'A Montanha Mágica',
           Publisher(3, 'Darkside Books', 'Rio de Janeiro'), 10, 1924, 0),
-      Book(4, 'Gabriel García Márquez', 'Cem Anos de Solidão',  
+      Book(4, 'Gabriel García Márquez', 'Cem Anos de Solidão',
           Publisher(3, 'Editora Rocco', 'Rio de Janeiro'), 30, 1967, 0),
       Book(5, 'Liev Tolstói', 'Gabriel García Márquez',
           Publisher(3, 'Editora Intrínseca', 'Fortaleza'), 6, 1913, 0),
@@ -63,6 +63,22 @@ class BooksList extends StatelessWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 5),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.my_library_books_rounded,
+                          color: Colors.black54,
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: Text(
+                            book.publisher.name,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 5),
                     Row(
                       children: [
