@@ -30,7 +30,7 @@ class _PublisherRegisterFormState extends State<PublisherRegisterForm> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const Icon(
-                Icons.menu_book_sharp,
+                Icons.my_library_books_rounded,
                 size: 90,
               ),
               const SizedBox(height: 20),

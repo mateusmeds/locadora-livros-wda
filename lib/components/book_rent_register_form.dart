@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BookRentRegisterForm extends StatefulWidget {
   const BookRentRegisterForm({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
   final userController = TextEditingController();
   final bookController = TextEditingController();
   final rentalDateController = TextEditingController();
-  final devolutionDateController = TextEditingController();
+  final previsionDateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
                 controller: userController,
                 decoration: const InputDecoration(
                   labelText: 'Usuário',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.person),
                 ),
               ),
               const SizedBox(height: 10),
@@ -47,23 +48,57 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
                 controller: bookController,
                 decoration: const InputDecoration(
                   labelText: 'Livro',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.menu_book_sharp),
                 ),
               ),
-              //TODO: ao clicar, abrir calendário para selecionar a data
               TextField(
                 controller: rentalDateController,
                 decoration: const InputDecoration(
                   labelText: 'Data de aluguel',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.date_range),
                 ),
+                readOnly: true,
+                onTap: () {
+                  showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now().subtract(Duration(days: 7)),
+                    lastDate: DateTime.now(),
+                  ).then((pickedDate) {
+                    if (pickedDate == null) {
+                      return;
+                    }
+
+                    setState(() {
+                      rentalDateController.text =
+                          DateFormat('dd/MM/y').format(pickedDate);
+                    });
+                  });
+                },
               ),
               TextField(
-                controller: devolutionDateController,
+                controller: previsionDateController,
                 decoration: const InputDecoration(
                   labelText: 'Data de previsão',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.date_range),
                 ),
+                readOnly: true,
+                onTap: () {
+                  showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now().subtract(Duration(days: 7)),
+                    lastDate: DateTime.now().add(Duration(days: 90)),
+                  ).then((pickedDate) {
+                    if (pickedDate == null) {
+                      return;
+                    }
+
+                    setState(() {
+                      previsionDateController.text = DateFormat('dd/MM/y').format(pickedDate);
+                    });
+                  });
+                },
               ),
             ],
           ),

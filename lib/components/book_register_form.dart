@@ -42,7 +42,6 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                   suffixIcon: Icon(Icons.add),
                 ),
               ),
-              const SizedBox(height: 10),
               //TODO: colocar input selecionável com a lista de editoras
               TextField(
                 controller: publisherController,
@@ -52,41 +51,6 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                 ),
               ),
               TextField(
-                controller: authorController,
-                decoration: const InputDecoration(
-                  labelText: 'Autor',
-                  suffixIcon: Icon(Icons.add),
-                ),
-              ),
-                          TextField(
-                controller: authorController,
-                decoration: const InputDecoration(
-                  labelText: 'Autor',
-                  suffixIcon: Icon(Icons.add),
-                ),
-              ),
-                          TextField(
-                controller: authorController,
-                decoration: const InputDecoration(
-                  labelText: 'Autor',
-                  suffixIcon: Icon(Icons.add),
-                ),
-              ),
-                          TextField(
-                controller: authorController,
-                decoration: const InputDecoration(
-                  labelText: 'Autor',
-                  suffixIcon: Icon(Icons.add),
-                ),
-              ),
-                          TextField(
-                controller: authorController,
-                decoration: const InputDecoration(
-                  labelText: 'Autor',
-                  suffixIcon: Icon(Icons.add),
-                ),
-              ),
-                          TextField(
                 controller: authorController,
                 decoration: const InputDecoration(
                   labelText: 'Autor',
