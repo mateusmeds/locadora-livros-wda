@@ -32,14 +32,11 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                 size: 90,
               ),
               const SizedBox(height: 20),
-              const Text("Cadastrar Livro"),
-              const SizedBox(height: 20),
-              //TODO: alterar os ícones
               TextField(
                 controller: nameController,
                 decoration: const InputDecoration(
                   labelText: 'Nome',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.menu_book_sharp),
                 ),
               ),
               //TODO: colocar input selecionável com a lista de editoras
@@ -47,21 +44,21 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                 controller: publisherController,
                 decoration: const InputDecoration(
                   labelText: 'Editora',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.my_library_books_rounded),
                 ),
               ),
               TextField(
                 controller: authorController,
                 decoration: const InputDecoration(
                   labelText: 'Autor',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.person),
                 ),
               ),
               TextField(
                 controller: releaseYearController,
                 decoration: const InputDecoration(
                   labelText: 'Ano de lançamento',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.date_range),
                 ),
               ),
               //TODO: colocar input de incrementar e decrementar
@@ -69,7 +66,7 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                 controller: quantityController,
                 decoration: const InputDecoration(
                   labelText: 'Quantidade',
-                  suffixIcon: Icon(Icons.add),
+                  prefixIcon: Icon(Icons.add),
                 ),
               ),
             ],

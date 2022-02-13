@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/book_register_form.dart';
+import 'package:livraria_wda/components/books_list.dart';
 import 'package:livraria_wda/components/publisher_register_form.dart';
 import 'package:livraria_wda/components/publishers_list.dart';
 
 import 'menu_drawer.dart';
 
-class PublishersHome extends StatelessWidget {
-  const PublishersHome({Key? key}) : super(key: key);
+class BooksHome extends StatelessWidget {
+  const BooksHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class PublishersHome extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 90),
         child: Column(
           children: const [
-            PublishersList(),
+            BooksList(),
           ],
         ),
       ),
@@ -25,7 +27,7 @@ class PublishersHome extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => const PublisherRegisterForm(),
+                builder: (BuildContext context) => const BookRegisterForm(),
               ),
             );
           },

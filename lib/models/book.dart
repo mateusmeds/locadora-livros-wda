@@ -32,7 +32,7 @@ class Book {
   }
 
   Publisher get publisher {
-    return publisher;
+    return _publisher;
   }
 
   int get releaseYear {
