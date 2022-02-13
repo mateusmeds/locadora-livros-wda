@@ -86,6 +86,7 @@ class BookSingle extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
@@ -107,6 +108,7 @@ class BookSingle extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
