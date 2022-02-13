@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/user_list.dart';
 import 'package:livraria_wda/components/users_home.dart';
+import 'package:livraria_wda/main.dart';
 
 class MenuDrawer extends StatelessWidget {
-
-  const MenuDrawer({ Key? key}) : super(key: key);
-
-  _openUsersListModal(BuildContext context) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) {
-          return UserList();
-        });
-  }
+  const MenuDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20),
           color: Colors.lightBlue,
           child: ListTile(
             leading: CircleAvatar(
@@ -33,7 +23,7 @@ class MenuDrawer extends StatelessWidget {
               backgroundColor: Colors.grey[400],
             ),
             textColor: Colors.white,
-            title: Text(
+            title: const Text(
               "Mateus Medeiros",
               style: TextStyle(
                 fontSize: 18,
@@ -41,7 +31,7 @@ class MenuDrawer extends StatelessWidget {
               ),
               overflow: TextOverflow.ellipsis,
             ),
-            subtitle: Text(
+            subtitle: const Text(
               "mateus@mail.com gesges ges gsehs hse",
               style: TextStyle(
                 fontSize: 16,
@@ -54,13 +44,13 @@ class MenuDrawer extends StatelessWidget {
         Container(
           color: Colors.grey[200],
           child: ListTile(
-            leading: Icon(Icons.person),
-            title: Text("Usuários"),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
+            leading: const Icon(Icons.home),
+            title: const Text("Início"),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => UsersHome(),
+                  builder: (BuildContext context) => MyHomePage(),
                 ),
               );
             },
@@ -69,13 +59,13 @@ class MenuDrawer extends StatelessWidget {
         Container(
           color: Colors.grey[200],
           child: ListTile(
-            leading: Icon(Icons.my_library_books_rounded),
-            title: Text("Editoras"),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
+            leading: const Icon(Icons.person),
+            title: const Text("Usuários"),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => UsersHome(),
+                  builder: (BuildContext context) => const UsersHome(),
                 ),
               );
             },
@@ -84,13 +74,13 @@ class MenuDrawer extends StatelessWidget {
         Container(
           color: Colors.grey[200],
           child: ListTile(
-            leading: Icon(Icons.menu_book_rounded),
-            title: Text("Livros"),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
+            leading: const Icon(Icons.my_library_books_rounded),
+            title: const Text("Editoras"),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => UsersHome(),
+                  builder: (BuildContext context) => const UsersHome(),
                 ),
               );
             },
@@ -99,13 +89,28 @@ class MenuDrawer extends StatelessWidget {
         Container(
           color: Colors.grey[200],
           child: ListTile(
-            leading: Icon(Icons.attach_money_outlined),
-            title: Text("Aluguéis"),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
+            leading: const Icon(Icons.menu_book_rounded),
+            title: const Text("Livros"),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => UsersHome(),
+                  builder: (BuildContext context) => const UsersHome(),
+                ),
+              );
+            },
+          ),
+        ),
+        Container(
+          color: Colors.grey[200],
+          child: ListTile(
+            leading: const Icon(Icons.attach_money_outlined),
+            title: const Text("Aluguéis"),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const UsersHome(),
                 ),
               );
             },

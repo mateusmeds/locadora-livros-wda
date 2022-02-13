@@ -6,7 +6,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final String title = 'WDA Livraria';
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -14,19 +13,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: title),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  final String title;
-
-  MyHomePage({required this.title, Key? key}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -40,11 +36,12 @@ class _MyHomePageState extends State<MyHomePage> {
       //só para a tela não ficar muito branca e confundir no navegador
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('WDA Livraria'),
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: const [
+            Text('Página Home'),
           ],
         ),
       ),
