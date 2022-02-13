@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/book_register_form.dart';
+import 'package:livraria_wda/components/book_rent_register_form.dart';
+import 'package:livraria_wda/components/publisher_register_form.dart';
 import 'package:livraria_wda/components/users_home.dart';
 import 'package:livraria_wda/main.dart';
 
@@ -42,7 +45,6 @@ class MenuDrawer extends StatelessWidget {
           ),
         ),
         Container(
-          color: Colors.grey[200],
           child: ListTile(
             leading: const Icon(Icons.home),
             title: const Text("Início"),
@@ -57,7 +59,6 @@ class MenuDrawer extends StatelessWidget {
           ),
         ),
         Container(
-          color: Colors.grey[200],
           child: ListTile(
             leading: const Icon(Icons.person),
             title: const Text("Usuários"),
@@ -72,7 +73,6 @@ class MenuDrawer extends StatelessWidget {
           ),
         ),
         Container(
-          color: Colors.grey[200],
           child: ListTile(
             leading: const Icon(Icons.my_library_books_rounded),
             title: const Text("Editoras"),
@@ -80,14 +80,13 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => const UsersHome(),
+                  builder: (BuildContext context) => const PublisherRegisterForm(),
                 ),
               );
             },
           ),
         ),
         Container(
-          color: Colors.grey[200],
           child: ListTile(
             leading: const Icon(Icons.menu_book_rounded),
             title: const Text("Livros"),
@@ -95,22 +94,21 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => const UsersHome(),
+                  builder: (BuildContext context) => BookRegisterForm(),
                 ),
               );
             },
           ),
         ),
         Container(
-          color: Colors.grey[200],
           child: ListTile(
-            leading: const Icon(Icons.attach_money_outlined),
+            leading: const Icon(Icons.date_range_rounded),
             title: const Text("Aluguéis"),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => const UsersHome(),
+                  builder: (BuildContext context) => BookRentRegisterForm(),
                 ),
               );
             },

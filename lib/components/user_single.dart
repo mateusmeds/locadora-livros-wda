@@ -120,13 +120,6 @@ class UserSingle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-            onPressed: () {},
-            child: Icon(Icons.delete_forever_rounded),
-            heroTag: null,
-            backgroundColor: Colors.red[400],
-          ),
-          SizedBox(height: 20,),
-          FloatingActionButton(
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -138,7 +131,14 @@ class UserSingle extends StatelessWidget {
             },
             child: Icon(Icons.edit),
             heroTag: null,
-          )
+          ),
+          SizedBox(height: 20),
+          FloatingActionButton(
+            onPressed: () {},
+            child: Icon(Icons.delete_forever_rounded),
+            heroTag: null,
+            backgroundColor: Colors.red[400],
+          ),
         ],
       ),
     );

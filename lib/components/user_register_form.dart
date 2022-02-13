@@ -19,47 +19,49 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
       appBar: AppBar(
         title: const Text('Cadastrar Usuário'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const Icon(
-              Icons.person_add_alt_1,
-              size: 90,
-            ),
-            const SizedBox(height: 20),
-            //TODO: Alterar os ícones
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'Nome',
-                prefixIcon: Icon(Icons.person),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const Icon(
+                Icons.person_add_alt_1,
+                size: 90,
               ),
-            ),
-            TextField(
-              controller: addressController,
-              decoration: const InputDecoration(
-                labelText: 'Endereço',
-                prefixIcon: Icon(Icons.location_on),
+              const SizedBox(height: 20),
+              //TODO: Alterar os ícones
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Nome',
+                  prefixIcon: Icon(Icons.person),
+                ),
               ),
-            ),
-            TextField(
-              controller: cityController,
-              decoration: const InputDecoration(
-                labelText: 'Cidade',
-                prefixIcon: Icon(Icons.location_city_rounded),
+              TextField(
+                controller: addressController,
+                decoration: const InputDecoration(
+                  labelText: 'Endereço',
+                  prefixIcon: Icon(Icons.location_on),
+                ),
               ),
-            ),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'E-mail',
-                prefixIcon: Icon(Icons.mail),
+              TextField(
+                controller: cityController,
+                decoration: const InputDecoration(
+                  labelText: 'Cidade',
+                  prefixIcon: Icon(Icons.location_city_rounded),
+                ),
               ),
-            ),
-          ],
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: 'E-mail',
+                  prefixIcon: Icon(Icons.mail),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
