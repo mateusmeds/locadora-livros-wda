@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/user_list.dart';
-import 'package:livraria_wda/components/user_register_form.dart';
+import 'package:livraria_wda/components/users/user_list.dart';
+import 'package:livraria_wda/components/users/user_register_form.dart';
 
-import 'menu_drawer.dart';
+import '../menu_drawer.dart';
 
 class UsersHome extends StatelessWidget {
   const UsersHome({Key? key}) : super(key: key);

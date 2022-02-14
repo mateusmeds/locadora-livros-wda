@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/user_edit.dart';
-import 'package:livraria_wda/components/user_single.dart';
+import 'package:livraria_wda/components/users/user_edit.dart';
+import 'package:livraria_wda/components/users/user_single.dart';
 import 'package:livraria_wda/models/user.dart';
 
 class UserList extends StatelessWidget {

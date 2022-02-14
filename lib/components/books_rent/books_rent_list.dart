@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/book_rent_single.dart';
+import 'package:livraria_wda/components/books_rent/book_rent_single.dart';
 import 'package:livraria_wda/main.dart';
 import 'package:livraria_wda/models/book.dart';
 import 'package:livraria_wda/models/book_rent.dart';

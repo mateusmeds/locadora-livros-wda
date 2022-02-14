@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/user_edit.dart';
+import 'package:livraria_wda/components/users/user_edit.dart';
 import 'package:livraria_wda/models/publisher.dart';
 import 'package:livraria_wda/models/user.dart';
 

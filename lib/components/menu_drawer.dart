@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/book_register_form.dart';
-import 'package:livraria_wda/components/book_rent_register_form.dart';
-import 'package:livraria_wda/components/books_home.dart';
-import 'package:livraria_wda/components/books_list.dart';
-import 'package:livraria_wda/components/books_rent_home.dart';
-import 'package:livraria_wda/components/publisher_register_form.dart';
-import 'package:livraria_wda/components/publishers_home.dart';
-import 'package:livraria_wda/components/users_home.dart';
+import 'package:livraria_wda/components/books/book_register_form.dart';
+import 'package:livraria_wda/components/books_rent/book_rent_register_form.dart';
+import 'package:livraria_wda/components/books/books_home.dart';
+import 'package:livraria_wda/components/books/books_list.dart';
+import 'package:livraria_wda/components/books_rent/books_rent_home.dart';
+import 'package:livraria_wda/components/publishers/publisher_register_form.dart';
+import 'package:livraria_wda/components/publishers/publishers_home.dart';
+import 'package:livraria_wda/components/users/users_home.dart';
 import 'package:livraria_wda/main.dart';
 
 class MenuDrawer extends StatelessWidget {

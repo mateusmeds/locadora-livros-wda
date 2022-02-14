@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/publisher_register_form.dart';
-import 'package:livraria_wda/components/publishers_list.dart';
+import 'package:livraria_wda/components/publishers/publisher_register_form.dart';
+import 'package:livraria_wda/components/publishers/publishers_list.dart';
 
-import 'menu_drawer.dart';
+import '../menu_drawer.dart';
 
 class PublishersHome extends StatelessWidget {
   const PublishersHome({Key? key}) : super(key: key);

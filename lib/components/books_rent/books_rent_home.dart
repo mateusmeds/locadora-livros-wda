@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/book_register_form.dart';
-import 'package:livraria_wda/components/books_list.dart';
-import 'package:livraria_wda/components/publisher_register_form.dart';
-import 'package:livraria_wda/components/publishers_list.dart';
+import 'package:livraria_wda/components/books/book_register_form.dart';
+import 'package:livraria_wda/components/books_rent/book_rent_register_form.dart';
+import 'package:livraria_wda/components/books/books_list.dart';
+import 'package:livraria_wda/components/books_rent/books_rent_list.dart';
 
-import 'menu_drawer.dart';
+import '../menu_drawer.dart';
 
-class BooksHome extends StatelessWidget {
-  const BooksHome({Key? key}) : super(key: key);
+class BooksRentHome extends StatelessWidget {
+  const BooksRentHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de Livros'),
+        title: const Text('Lista de Aluguéis'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(bottom: 90),
         child: Column(
           children: const [
-            BooksList(),
+            BooksRentList(),
           ],
         ),
       ),
@@ -27,7 +27,7 @@ class BooksHome extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => const BookRegisterForm(),
+                builder: (BuildContext context) => const BookRentRegisterForm(),
               ),
             );
           },
