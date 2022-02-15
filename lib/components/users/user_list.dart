@@ -1,37 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/components/users/user_edit.dart';
 import 'package:livraria_wda/components/users/user_single.dart';
 import 'package:livraria_wda/models/user.dart';
+import 'package:livraria_wda/providers/UserProvider.dart';
+import 'package:provider/provider.dart';
 
 class UserList extends StatelessWidget {
-  const UserList({Key? key}) : super(key: key);
+  final List<User> users;
+  const UserList(this.users, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<User> users = [
-      User(
-          1,
-          'Mateus Medeiros',
-          'mateusmedeiros@mail.com',
-          'Rua Teste, 458',
-          'Natal'),
-      User(
-          1,
-          'Rafael Rafael Rafael Rafael Rafael Rafael Rafael Rafael Rafael',
-          'rafaelrafaelrafaelrafael@gmail.com',
-          'Rua Teste, Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste',
-          'Santa Cruz'),
-      User(1, 'Mateus', 'mateus@mail.com',
-          'Rua Teste, 363', 'Natal'),
-      User(1, 'Mateus', 'mateus@mail.com',
-          'Rua Teste, 363', 'Natal'),
-      User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
-      User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
-      User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
-      User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
-      User(1, 'Mateus', 'mateus@mail.com', 'Rua Teste, 363', 'Natal'),
-    ];
 
+        
     return Expanded(
       child: ListView.builder(
         itemCount: users.length,
