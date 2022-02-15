@@ -20,7 +20,10 @@ class UserProvider with ChangeNotifier {
       Uri.parse('http://livraria--back.herokuapp.com/api/usuarios'),
       headers: {'content-type': 'application/json'},
     );
-    if (response.body == 'null') return;
+
+    if (response.body == 'null') {
+      return;
+    }
 
     List<dynamic> usersData = jsonDecode(response.body);
 
@@ -40,21 +43,25 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> saveUser(Map<String, String> data) {
-    //bool hasId = data['id'] != null;
+    final userId = int.tryParse(data['id'].toString());
+
+    bool hasId = userId != 0;
+
+    if (data.keys.contains('id')) {}
 
     final user = User(
-      0,
+      hasId ? userId : 0,
       data['name'] as String,
       data['email'] as String,
       data['address'] as String,
       data['city'] as String,
     );
 
-    // if (hasId) {
-    //   return updateProduct(product);
-    // } else {
-    return addUser(user);
-    // }
+    if (hasId) {
+      return updateUser(user);
+    } else {
+      return addUser(user);
+    }
   }
 
   Future<void> addUser(User user) async {
@@ -72,10 +79,6 @@ class UserProvider with ChangeNotifier {
       ),
     );
 
-    final bool status = response.statusCode == 200;
-    print('OI ${response.statusCode}');
-    print(status);
-
     //Pegando id do usuário cadastrado
     final userId = jsonDecode(response.body)['id'];
 
@@ -89,26 +92,37 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> updateProduct(Product product) async {
-  //   int index = _items.indexWhere((p) => p.id == product.id);
+  User userById(int id) {
+    User user = _users.firstWhere((element) => element.id == id);
 
-  //   if (index >= 0) {
-  //     await http.patch(
-  //       Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
-  //       body: jsonEncode(
-  //         {
-  //           "name": product.name,
-  //           "description": product.description,
-  //           "price": product.price,
-  //           "imageUrl": product.imageUrl,
-  //         },
-  //       ),
-  //     );
+    return user;
+  }
 
-  //     _items[index] = product;
-  //     notifyListeners();
-  //   }
-  // }
+
+  Future<void> updateUser(User user) async {
+    //Pegando index do usuário para poder substituir
+    int index = _users.indexWhere((p) => p.id == user.id);
+
+    if (index >= 0) {
+      final response = await http.put(
+        Uri.parse('http://livraria--back.herokuapp.com/api/usuario'),
+        headers: {'content-type': 'application/json'},
+        body: jsonEncode(
+          {
+            "id": user.id,
+            "nome": user.name,
+            "email": user.email,
+            "endereco": user.address,
+            "cidade": user.city,
+          },
+        ),
+      );
+
+      _users[index] = user;
+
+      notifyListeners();
+    }
+  }
 
   // Future<void> removeProduct(Product product) async {
   //   int index = _items.indexWhere((p) => p.id == product.id);

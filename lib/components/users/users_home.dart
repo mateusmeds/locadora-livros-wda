@@ -16,6 +16,7 @@ class UsersHome extends StatefulWidget {
 
 class _UsersHomeState extends State<UsersHome> {
   bool _isLoading = true;
+  bool _isError = false;
 
   @override
   void initState() {
@@ -27,13 +28,18 @@ class _UsersHomeState extends State<UsersHome> {
       setState(() {
         _isLoading = false;
       });
+    }).catchError((onError) {
+      setState(() {
+        _isLoading = false;
+        _isError = true;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de usuários'),
@@ -46,7 +52,7 @@ class _UsersHomeState extends State<UsersHome> {
               )
             : Column(
                 children: [
-                  UserList(userProvider.users),
+                  _isError ? Text('Nenhum usuár') : UserList(userProvider.users),
                 ],
               ),
       ),

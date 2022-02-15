@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/models/user.dart';
 import 'package:livraria_wda/providers/UserProvider.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +26,8 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
     }
 
     _form.currentState?.save();
+
+    _formData['id'] = '0';
 
     setState(() => _isLoading = true);
 

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/users/user_single.dart';
 import 'package:livraria_wda/models/user.dart';
-import 'package:livraria_wda/providers/UserProvider.dart';
-import 'package:provider/provider.dart';
 
 class UserList extends StatelessWidget {
   final List<User> users;
@@ -10,8 +8,6 @@ class UserList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-        
     return Expanded(
       child: ListView.builder(
         itemCount: users.length,

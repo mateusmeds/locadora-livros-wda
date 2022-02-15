@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/users/user_edit.dart';
 import 'package:livraria_wda/models/user.dart';
+import 'package:livraria_wda/providers/UserProvider.dart';
+import 'package:provider/provider.dart';
 
 class UserSingle extends StatelessWidget {
   final User user;
@@ -9,6 +11,10 @@ class UserSingle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final userProvider = Provider.of<UserProvider>(context);
+    final userTest = userProvider.userById(user.id);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Usuário'),
@@ -32,7 +38,7 @@ class UserSingle extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      user.name,
+                      userTest.name,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -59,7 +65,7 @@ class UserSingle extends StatelessWidget {
                         const SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            user.email,
+                            userTest.email,
                             style: const TextStyle(
                               fontSize: 16,
                             ),
@@ -83,7 +89,7 @@ class UserSingle extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         Flexible(
-                          child: Text(user.address),
+                          child: Text(userTest.address),
                         ),
                       ],
                     ),
@@ -103,7 +109,7 @@ class UserSingle extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         Flexible(
-                          child: Text(user.city),
+                          child: Text(userTest.city),
                         ),
                       ],
                     ),
@@ -124,7 +130,7 @@ class UserSingle extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) => UserEditForm(
-                    user: user,
+                    user: userTest,
                   ),
                 ),
               );
