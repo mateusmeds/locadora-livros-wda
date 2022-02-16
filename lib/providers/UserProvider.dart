@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/models/user.dart';
@@ -93,11 +94,11 @@ class UserProvider with ChangeNotifier {
   }
 
   User userById(int id) {
-    User user = _users.firstWhere((element) => element.id == id);
-
-    return user;
+    if (_users.any((element) => element.id == id)) {
+      return _users. firstWhere((element) => element.id == id);
+    }
+    return User(-100, '@anonimo', '@anonimo', '@anonimo', '@anonimo');
   }
-
 
   Future<void> updateUser(User user) async {
     //Pegando index do usuário para poder substituir
@@ -124,26 +125,37 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  // Future<void> removeProduct(Product product) async {
-  //   int index = _items.indexWhere((p) => p.id == product.id);
+  Future<void> removeUser(User user) async {
+    int index = _users.indexWhere((u) => u.id == user.id);
 
-  //   if (index >= 0) {
-  //     final product = _items[index];
-  //     _items.remove(product);
-  //     notifyListeners();
-
-  //     final response = await http.delete(
-  //       Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
-  //     );
-
-  //     if (response.statusCode >= 400) {
-  //       _items.insert(index, product);
-  //       notifyListeners();
-  //       throw HttpException(
-  //         msg: 'Não foi possível excluir o produto.',
-  //         statusCode: response.statusCode,
-  //       );
-  //     }
-  //   }
-  // }
+    if (index >= 0) {
+      await http
+          .delete(
+        Uri.parse('http://livraria--back.herokuapp.com/api/usuario'),
+        headers: {'content-type': 'application/json'},
+        body: jsonEncode(
+          {
+            "id": user.id,
+            "nome": user.name,
+            "email": user.email,
+            "endereco": user.address,
+            "cidade": user.city,
+          },
+        ),
+      )
+          .catchError((onError) {
+        throw HttpException(
+          'Não foi possível excluir o usuário.',
+        );
+      }).then((value) {
+        final user = _users[index];
+        _users.remove(user);
+        notifyListeners();
+      });
+    } else {
+      throw HttpException(
+        'Usuário não existe.',
+      );
+    }
+  }
 }

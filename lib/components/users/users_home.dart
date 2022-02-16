@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../menu_drawer.dart';
 
 class UsersHome extends StatefulWidget {
-  const UsersHome({Key? key}) : super(key: key);
+  UsersHome({Key? key}) : super(key: key);
 
   @override
   State<UsersHome> createState() => _UsersHomeState();
@@ -17,6 +17,7 @@ class UsersHome extends StatefulWidget {
 class _UsersHomeState extends State<UsersHome> {
   bool _isLoading = true;
   bool _isError = false;
+  
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _UsersHomeState extends State<UsersHome> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
 
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de usuários'),
@@ -52,7 +54,9 @@ class _UsersHomeState extends State<UsersHome> {
               )
             : Column(
                 children: [
-                  _isError ? Text('Nenhum usuár') : UserList(userProvider.users),
+                  _isError
+                      ? Text('Nenhum usuário encontrado.')
+                      : UserList(userProvider.users),
                 ],
               ),
       ),

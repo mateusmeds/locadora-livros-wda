@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/users/user_edit.dart';
+import 'package:livraria_wda/components/users/users_home.dart';
 import 'package:livraria_wda/models/user.dart';
 import 'package:livraria_wda/providers/UserProvider.dart';
 import 'package:provider/provider.dart';
@@ -11,9 +14,50 @@ class UserSingle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final userProvider = Provider.of<UserProvider>(context);
-    final userTest = userProvider.userById(user.id);
+    final userAtt = userProvider.userById(user.id);
+    final msg = ScaffoldMessenger.of(context);
+
+    void onDelete() {
+      showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('Excluir Usuario'),
+          content: Text('Tem certeza?'),
+          actions: [
+            TextButton(
+              child: Text('Não'),
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+            TextButton(
+                child: Text('Sim'),
+                onPressed: () {
+                  Navigator.of(ctx).pop(true);
+                }),
+          ],
+        ),
+      ).then((value) async {
+        if (value ?? false) {
+          try {
+            await Provider.of<UserProvider>(
+              context,
+              listen: false,
+            ).removeUser(userAtt);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => UsersHome(),
+              ),
+            );
+          } on HttpException catch (error) {
+            msg.showSnackBar(
+              SnackBar(
+                content: Text(error.toString()),
+              ),
+            );
+          }
+        }
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +82,7 @@ class UserSingle extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      userTest.name,
+                      userAtt.name,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -65,7 +109,7 @@ class UserSingle extends StatelessWidget {
                         const SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            userTest.email,
+                            userAtt.email,
                             style: const TextStyle(
                               fontSize: 16,
                             ),
@@ -89,7 +133,7 @@ class UserSingle extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         Flexible(
-                          child: Text(userTest.address),
+                          child: Text(userAtt.address),
                         ),
                       ],
                     ),
@@ -109,7 +153,7 @@ class UserSingle extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         Flexible(
-                          child: Text(userTest.city),
+                          child: Text(userAtt.city),
                         ),
                       ],
                     ),
@@ -130,7 +174,7 @@ class UserSingle extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) => UserEditForm(
-                    user: userTest,
+                    user: userAtt,
                   ),
                 ),
               );
@@ -140,7 +184,7 @@ class UserSingle extends StatelessWidget {
           ),
           SizedBox(height: 20),
           FloatingActionButton(
-            onPressed: () {},
+            onPressed: onDelete,
             child: Icon(Icons.delete_forever_rounded),
             heroTag: null,
             backgroundColor: Colors.red[400],
