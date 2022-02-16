@@ -1,24 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/publishers/publisher_single.dart';
-import 'package:livraria_wda/main.dart';
 import 'package:livraria_wda/models/publisher.dart';
 
 class PublishersList extends StatelessWidget {
-  const PublishersList({Key? key}) : super(key: key);
+  final List<Publisher> publishers;
+  const PublishersList(this.publishers, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<Publisher> publishers = [
-      Publisher(1, 'Aleph', 'Natal'),
-      Publisher(2, 'Suma', 'São Paulo'),
-      Publisher(3, 'Darkside Books', 'Rio de Janeiro'),
-      Publisher(4, 'Editora Rocco', 'Rio de Janeiro'),
-      Publisher(5, 'Editora Intrínseca', 'Fortaleza'),
-      Publisher(6, 'Companhia da Letras', 'Fortaleza'),
-      Publisher(7, 'Globo Livros', 'Bahia'),
-      Publisher(8, 'Harper Collins', 'Bahia'),
-      Publisher(9, 'Editora Arqueiro', 'Natal'),
-    ];
 
     return Expanded(
       child: ListView.builder(

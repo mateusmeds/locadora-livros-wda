@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/list_empty.dart';
 import 'package:livraria_wda/components/users/user_list.dart';
 import 'package:livraria_wda/components/users/user_register_form.dart';
 import 'package:livraria_wda/models/user.dart';
@@ -17,7 +18,6 @@ class UsersHome extends StatefulWidget {
 class _UsersHomeState extends State<UsersHome> {
   bool _isLoading = true;
   bool _isError = false;
-  
 
   @override
   void initState() {
@@ -41,7 +41,6 @@ class _UsersHomeState extends State<UsersHome> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
 
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de usuários'),
@@ -55,7 +54,10 @@ class _UsersHomeState extends State<UsersHome> {
             : Column(
                 children: [
                   _isError
-                      ? Text('Nenhum usuário encontrado.')
+                      ? ListEmptyMessage(
+                          message: 'Nenhum usuário encontrado.',
+                          icon: Icons.person,
+                        )
                       : UserList(userProvider.users),
                 ],
               ),
