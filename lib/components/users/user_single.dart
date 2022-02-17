@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/users/user_edit.dart';
-import 'package:livraria_wda/components/users/users_home.dart';
 import 'package:livraria_wda/models/user.dart';
 import 'package:livraria_wda/providers/UserProvider.dart';
 import 'package:provider/provider.dart';
@@ -22,15 +21,15 @@ class UserSingle extends StatelessWidget {
       showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text('Excluir Usuario'),
-          content: Text('Tem certeza?'),
+          title: const Text('Excluir Usuario'),
+          content: const Text('Tem certeza?'),
           actions: [
             TextButton(
-              child: Text('Não'),
+              child: const Text('Não'),
               onPressed: () => Navigator.of(ctx).pop(false),
             ),
             TextButton(
-                child: Text('Sim'),
+                child: const Text('Sim'),
                 onPressed: () {
                   Navigator.of(ctx).pop(true);
                 }),
@@ -42,16 +41,22 @@ class UserSingle extends StatelessWidget {
             await Provider.of<UserProvider>(
               context,
               listen: false,
-            ).removeUser(userAtt);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => UsersHome(),
-              ),
-            );
+            ).removeUser(userAtt).then((value) {
+              Navigator.of(context).pop();
+              msg.showSnackBar(
+                SnackBar(
+                  content: Text('Usuário excluído com sucesso.'),
+                  backgroundColor: Colors.green[400],
+                  duration: Duration(seconds: 7),
+                ),
+              );
+            });
           } on HttpException catch (error) {
             msg.showSnackBar(
               SnackBar(
-                content: Text(error.toString()),
+                content: Text(error.toString().replaceAll('HttpException: ', 'Erro: ')),
+                backgroundColor: Colors.red[400],
+                duration: Duration(seconds: 7),
               ),
             );
           }
@@ -170,21 +175,23 @@ class UserSingle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => UserEditForm(
-                    user: userAtt,
-                  ),
-                ),
-              );
-            },
+            onPressed: userAtt.id == -100
+                ? null
+                : () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => UserEditForm(
+                          user: userAtt,
+                        ),
+                      ),
+                    );
+                  },
             child: Icon(Icons.edit),
             heroTag: null,
           ),
           SizedBox(height: 20),
           FloatingActionButton(
-            onPressed: onDelete,
+            onPressed: userAtt.id != -100 ? onDelete : null,
             child: Icon(Icons.delete_forever_rounded),
             heroTag: null,
             backgroundColor: Colors.red[400],

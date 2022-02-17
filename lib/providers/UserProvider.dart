@@ -95,7 +95,7 @@ class UserProvider with ChangeNotifier {
 
   User userById(int id) {
     if (_users.any((element) => element.id == id)) {
-      return _users. firstWhere((element) => element.id == id);
+      return _users.firstWhere((element) => element.id == id);
     }
     return User(-100, '@anonimo', '@anonimo', '@anonimo', '@anonimo');
   }
@@ -129,8 +129,7 @@ class UserProvider with ChangeNotifier {
     int index = _users.indexWhere((u) => u.id == user.id);
 
     if (index >= 0) {
-      await http
-          .delete(
+      final response = await http.delete(
         Uri.parse('http://livraria--back.herokuapp.com/api/usuario'),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(
@@ -142,16 +141,16 @@ class UserProvider with ChangeNotifier {
             "cidade": user.city,
           },
         ),
-      )
-          .catchError((onError) {
-        throw HttpException(
-          'Não foi possível excluir o usuário.',
-        );
-      }).then((value) {
-        final user = _users[index];
-        _users.remove(user);
+      );
+
+      if (response.statusCode == 200) {
+        _users.remove(_users[index]);
         notifyListeners();
-      });
+      } else {
+        throw HttpException(
+          jsonDecode(response.body)['error'],
+        );
+      }
     } else {
       throw HttpException(
         'Usuário não existe.',
