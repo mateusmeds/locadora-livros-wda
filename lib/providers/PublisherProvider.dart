@@ -77,8 +77,6 @@ class PublisherProvider with ChangeNotifier {
       ),
     );
 
-    print(jsonDecode(response.body));
-
     if (response.statusCode == 200) {
       //Pegando id da editora cadastrada
       final publisherId = jsonDecode(response.body)['id'];
@@ -91,7 +89,7 @@ class PublisherProvider with ChangeNotifier {
 
       notifyListeners();
     } else {
-      throw HttpException(
+      throw const HttpException(
         'Ocorreu um erro ao tentar salvar a editora.',
       );
     }
@@ -114,8 +112,6 @@ class PublisherProvider with ChangeNotifier {
         ),
       );
 
-      print(jsonDecode(response.body));
-
       if (response.statusCode == 200) {
         _publishers[index] = publisher;
 
@@ -128,37 +124,38 @@ class PublisherProvider with ChangeNotifier {
     }
   }
 
-  // Future<void> removeUser(User user) async {
-  //   int index = _users.indexWhere((u) => u.id == user.id);
+  Future<void> removePublisher(Publisher publisher) async {
+    int index = _publishers.indexWhere((u) => u.id == publisher.id);
 
-  //   if (index >= 0) {
-  //     await http
-  //         .delete(
-  //       Uri.parse('http://livraria--back.herokuapp.com/api/usuario'),
-  //       headers: {'content-type': 'application/json'},
-  //       body: jsonEncode(
-  //         {
-  //           "id": user.id,
-  //           "nome": user.name,
-  //           "email": user.email,
-  //           "endereco": user.address,
-  //           "cidade": user.city,
-  //         },
-  //       ),
-  //     )
-  //         .catchError((onError) {
-  //       throw HttpException(
-  //         'Não foi possível excluir o usuário.',
-  //       );
-  //     }).then((value) {
-  //       final user = _users[index];
-  //       _users.remove(user);
-  //       notifyListeners();
-  //     });
-  //   } else {
-  //     throw HttpException(
-  //       'Usuário não existe.',
-  //     );
-  //   }
-  // }
+    if (index >= 0) {
+      final response = await http.delete(
+        Uri.parse('http://livraria--back.herokuapp.com/api/editora'),
+        headers: {'content-type': 'application/json'},
+        body: jsonEncode(
+          {
+            "id": publisher.id,
+            "nome": publisher.name,
+            "cidade": publisher.city,
+          },
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        _publishers.remove(_publishers[index]);
+        notifyListeners();
+      } else if (response.statusCode == 400) {
+        throw HttpException(
+          jsonDecode(response.body)['error']
+        );
+      } else {
+        throw const HttpException(
+          'Ocorreu um erro ao tentar remover a editora.',
+        );
+      }
+    } else {
+      throw const HttpException(
+        'Editora não existe.',
+      );
+    }
+  }
 }

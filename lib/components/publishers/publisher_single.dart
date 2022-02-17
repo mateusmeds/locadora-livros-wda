@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/publishers/publisher_edit.dart';
 import 'package:livraria_wda/components/users/user_edit.dart';
 import 'package:livraria_wda/models/publisher.dart';
 import 'package:livraria_wda/models/user.dart';
+import 'package:livraria_wda/providers/PublisherProvider.dart';
+import 'package:provider/provider.dart';
 
 class PublisherSingle extends StatelessWidget {
   final Publisher publisher;
@@ -11,6 +15,63 @@ class PublisherSingle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final publisherProvider = Provider.of<PublisherProvider>(context);
+    final publisherAtt = publisherProvider.publisherById(publisher.id);
+    final msg = ScaffoldMessenger.of(context);
+
+    void onDelete() {
+      showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Excluir Editora'),
+          content: const Text('Tem certeza?'),
+          actions: [
+            TextButton(
+              child: const Text('Não'),
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+            TextButton(
+                child: const Text('Sim'),
+                onPressed: () {
+                  Navigator.of(ctx).pop(true);
+                }),
+          ],
+        ),
+      ).then((value) async {
+        if (value ?? false) {
+          try {
+            await Provider.of<PublisherProvider>(
+              context,
+              listen: false,
+            ).removePublisher(publisherAtt).then((value) {
+              Navigator.of(context).pop();
+              msg.showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Editora excluída com sucesso.',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  backgroundColor: Colors.green[400],
+                  duration: Duration(seconds: 5),
+                ),
+              );
+            });
+          } on HttpException catch (error) {
+            msg.showSnackBar(
+              SnackBar(
+                content: Text(
+                  error.toString().replaceAll('HttpException: ', 'Erro: '),
+                  style: TextStyle(fontSize: 17),
+                ),
+                backgroundColor: Colors.red[400],
+                duration: Duration(seconds: 5),
+              ),
+            );
+          }
+        }
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Editora'),
@@ -34,7 +95,7 @@ class PublisherSingle extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      publisher.name,
+                      publisherAtt.name,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -61,7 +122,7 @@ class PublisherSingle extends StatelessWidget {
                         const SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            publisher.city,
+                            publisherAtt.city,
                           ),
                         ),
                       ],
@@ -106,7 +167,7 @@ class PublisherSingle extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) => PublisherEditForm(
-                    publisher: publisher,
+                    publisher: publisherAtt,
                   ),
                 ),
               );
@@ -116,7 +177,7 @@ class PublisherSingle extends StatelessWidget {
           ),
           SizedBox(height: 20),
           FloatingActionButton(
-            onPressed: () {},
+            onPressed: onDelete,
             child: Icon(Icons.delete_forever_rounded),
             heroTag: null,
             backgroundColor: Colors.red[400],
