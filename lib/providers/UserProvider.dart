@@ -80,17 +80,32 @@ class UserProvider with ChangeNotifier {
       ),
     );
 
-    //Pegando id do usuário cadastrado
-    final userId = jsonDecode(response.body)['id'];
+    //Cadastrou
+    if (response.statusCode == 200) {
+      //Pegando id do usuário cadastrado
+      final userId = jsonDecode(response.body)['id'];
 
-    _users.add(User(
-      userId,
-      user.name,
-      user.email,
-      user.address,
-      user.city,
-    ));
-    notifyListeners();
+      _users.add(User(
+        userId,
+        user.name,
+        user.email,
+        user.address,
+        user.city,
+      ));
+      notifyListeners();
+
+      //E-mail já existe
+    } else if (response.statusCode == 400) {
+      throw HttpException(
+        jsonDecode(response.body)['error'],
+      );
+
+      //Erro inesperado
+    } else {
+      throw HttpException(
+        'Ocorreu um erro ao tentar salvar o usuário.',
+      );
+    }
   }
 
   User userById(int id) {
@@ -119,9 +134,20 @@ class UserProvider with ChangeNotifier {
         ),
       );
 
-      _users[index] = user;
+      print(jsonDecode(response.body));
 
-      notifyListeners();
+      if (response.statusCode == 200) {
+        _users[index] = user;
+        notifyListeners();
+      } else {
+        throw HttpException(
+          'Ocorreu um erro ao tentar salvar o usuário.',
+        );
+      }
+    } else {
+      throw HttpException(
+        'Usuário não existe.',
+      );
     }
   }
 

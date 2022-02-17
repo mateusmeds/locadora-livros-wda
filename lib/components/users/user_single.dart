@@ -45,18 +45,24 @@ class UserSingle extends StatelessWidget {
               Navigator.of(context).pop();
               msg.showSnackBar(
                 SnackBar(
-                  content: Text('Usuário excluído com sucesso.'),
+                  content: Text(
+                    'Usuário excluído com sucesso.',
+                    style: TextStyle(fontSize: 17),
+                  ),
                   backgroundColor: Colors.green[400],
-                  duration: Duration(seconds: 7),
+                  duration: Duration(seconds: 5),
                 ),
               );
             });
           } on HttpException catch (error) {
             msg.showSnackBar(
               SnackBar(
-                content: Text(error.toString().replaceAll('HttpException: ', 'Erro: ')),
+                content: Text(
+                  error.toString().replaceAll('HttpException: ', 'Erro: '),
+                  style: TextStyle(fontSize: 17),
+                ),
                 backgroundColor: Colors.red[400],
-                duration: Duration(seconds: 7),
+                duration: Duration(seconds: 5),
               ),
             );
           }

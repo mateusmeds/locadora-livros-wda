@@ -18,47 +18,54 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
 
   bool _isLoading = false;
 
-  Future<void> _submitForm() async {
-    final isValid = _form.currentState?.validate() ?? false;
-
-    if (!isValid) {
-      return;
-    }
-
-    _form.currentState?.save();
-
-    _formData['id'] = '0';
-
-    setState(() => _isLoading = true);
-
-    try {
-      await Provider.of<UserProvider>(
-        context,
-        listen: false,
-      ).saveUser(_formData);
-
-      Navigator.of(context).pop();
-    } catch (error) {
-      await showDialog<void>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text('Ocorreu um erro!'),
-          content: Text('Ocorreu um erro ao tentar salvar o usuário.'),
-          actions: [
-            TextButton(
-              child: Text('Ok'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        ),
-      );
-    } finally {
-      setState(() => _isLoading = false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final msg = ScaffoldMessenger.of(context);
+
+    Future<void> _submitForm() async {
+      final isValid = _form.currentState?.validate() ?? false;
+
+      if (!isValid) {
+        return;
+      }
+
+      _form.currentState?.save();
+
+      _formData['id'] = '0';
+
+      setState(() => _isLoading = true);
+
+      try {
+        await Provider.of<UserProvider>(
+          context,
+          listen: false,
+        ).saveUser(_formData).then((value) {
+          msg.showSnackBar(
+            SnackBar(
+              content: Text('Usuário cadastrado com sucesso.'),
+              backgroundColor: Colors.green[400],
+              duration: Duration(seconds: 5),
+            ),
+          );
+        });
+
+        Navigator.of(context).pop();
+      } catch (error) {
+        msg.showSnackBar(
+          SnackBar(
+            content: Text(
+              error.toString().replaceAll('HttpException: ', 'Erro: '),
+              style: TextStyle(fontSize: 17),
+            ),
+            backgroundColor: Colors.red[400],
+            duration: Duration(seconds: 5),
+          ),
+        );
+      } finally {
+        setState(() => _isLoading = false);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cadastrar Usuário'),
