@@ -42,7 +42,10 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
         ).saveUser(_formData).then((value) {
           msg.showSnackBar(
             SnackBar(
-              content: Text('Usuário cadastrado com sucesso.'),
+              content: Text(
+                'Usuário cadastrado com sucesso.',
+                style: TextStyle(fontSize: 17),
+              ),
               backgroundColor: Colors.green[400],
               duration: Duration(seconds: 5),
             ),
@@ -88,7 +91,6 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
                         size: 90,
                       ),
                       const SizedBox(height: 20),
-                      //TODO: Alterar os ícones
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Nome',

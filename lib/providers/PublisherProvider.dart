@@ -3,14 +3,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/models/publisher.dart';
-import 'package:livraria_wda/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class PublisherProvider with ChangeNotifier {
   List<Publisher> _publishers = [];
 
   List<Publisher> get publishers => _publishers;
-  
+
   Future<void> loadPublishers() async {
     _publishers.clear();
 
@@ -38,87 +37,96 @@ class PublisherProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> saveUser(Map<String, String> data) {
-  //   final userId = int.tryParse(data['id'].toString());
+  Publisher publisherById(int id) {
+    if (_publishers.any((element) => element.id == id)) {
+      return _publishers.firstWhere((element) => element.id == id);
+    }
+    return Publisher(-100, '@anonimo', '@anonimo');
+  }
 
-  //   bool hasId = userId != 0;
+  Future<void> savePublisher(Map<String, String> data) {
+    final publisherId = int.tryParse(data['id'].toString());
 
-  //   if (data.keys.contains('id')) {}
+    bool hasId = publisherId != 0;
 
-  //   final user = User(
-  //     hasId ? userId : 0,
-  //     data['name'] as String,
-  //     data['email'] as String,
-  //     data['address'] as String,
-  //     data['city'] as String,
-  //   );
+    if (data.keys.contains('id')) {}
 
-  //   if (hasId) {
-  //     return updateUser(user);
-  //   } else {
-  //     return addUser(user);
-  //   }
-  // }
+    final publisher = Publisher(
+      hasId ? publisherId! : 0,
+      data['name'] as String,
+      data['city'] as String,
+    );
 
-  // Future<void> addUser(User user) async {
-  //   final response = await http.post(
-  //     Uri.parse('http://livraria--back.herokuapp.com/api/usuario'),
-  //     headers: {'content-type': 'application/json'},
-  //     body: jsonEncode(
-  //       {
-  //         "id": 0,
-  //         "nome": user.name,
-  //         "email": user.email,
-  //         "endereco": user.address,
-  //         "cidade": user.city,
-  //       },
-  //     ),
-  //   );
+    if (hasId) {
+      return updatePublisher(publisher);
+    } else {
+      return addPublisher(publisher);
+    }
+  }
 
-  //   //Pegando id do usuário cadastrado
-  //   final userId = jsonDecode(response.body)['id'];
+  Future<void> addPublisher(Publisher publisher) async {
+    final response = await http.post(
+      Uri.parse('http://livraria--back.herokuapp.com/api/editora'),
+      headers: {'content-type': 'application/json'},
+      body: jsonEncode(
+        {
+          "id": 0,
+          "nome": publisher.name,
+          "cidade": publisher.city,
+        },
+      ),
+    );
 
-  //   _users.add(User(
-  //     userId,
-  //     user.name,
-  //     user.email,
-  //     user.address,
-  //     user.city,
-  //   ));
-  //   notifyListeners();
-  // }
+    print(jsonDecode(response.body));
 
-  // User userById(int id) {
-  //   if (_users.any((element) => element.id == id)) {
-  //     return _users. firstWhere((element) => element.id == id);
-  //   }
-  //   return User(-100, '@anonimo', '@anonimo', '@anonimo', '@anonimo');
-  // }
+    if (response.statusCode == 200) {
+      //Pegando id da editora cadastrada
+      final publisherId = jsonDecode(response.body)['id'];
 
-  // Future<void> updateUser(User user) async {
-  //   //Pegando index do usuário para poder substituir
-  //   int index = _users.indexWhere((p) => p.id == user.id);
+      _publishers.add(Publisher(
+        publisherId,
+        publisher.name,
+        publisher.city,
+      ));
 
-  //   if (index >= 0) {
-  //     final response = await http.put(
-  //       Uri.parse('http://livraria--back.herokuapp.com/api/usuario'),
-  //       headers: {'content-type': 'application/json'},
-  //       body: jsonEncode(
-  //         {
-  //           "id": user.id,
-  //           "nome": user.name,
-  //           "email": user.email,
-  //           "endereco": user.address,
-  //           "cidade": user.city,
-  //         },
-  //       ),
-  //     );
+      notifyListeners();
+    } else {
+      throw HttpException(
+        'Ocorreu um erro ao tentar salvar a editora.',
+      );
+    }
+  }
 
-  //     _users[index] = user;
+  Future<void> updatePublisher(Publisher publisher) async {
+    //Pegando index da editora para poder substituir
+    int index = _publishers.indexWhere((p) => p.id == publisher.id);
 
-  //     notifyListeners();
-  //   }
-  // }
+    if (index >= 0) {
+      final response = await http.put(
+        Uri.parse('http://livraria--back.herokuapp.com/api/editora'),
+        headers: {'content-type': 'application/json'},
+        body: jsonEncode(
+          {
+            "id": publisher.id,
+            "nome": publisher.name,
+            "cidade": publisher.city,
+          },
+        ),
+      );
+
+      print(jsonDecode(response.body));
+
+      if (response.statusCode == 200) {
+        _publishers[index] = publisher;
+
+        notifyListeners();
+      } else {
+        throw const HttpException(
+          'Ocorreu um erro ao tentar salvar a editora.',
+        );
+      }
+    }
+  }
 
   // Future<void> removeUser(User user) async {
   //   int index = _users.indexWhere((u) => u.id == user.id);

@@ -1,19 +1,18 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:livraria_wda/models/user.dart';
-import 'package:livraria_wda/providers/UserProvider.dart';
+import 'package:livraria_wda/models/publisher.dart';
+import 'package:livraria_wda/providers/PublisherProvider.dart';
 import 'package:provider/provider.dart';
 
-class UserEditForm extends StatefulWidget {
-  final User user;
+class PublisherEditForm extends StatefulWidget {
+  final Publisher publisher;
 
-  const UserEditForm({required this.user, Key? key}) : super(key: key);
+  const PublisherEditForm({required this.publisher, Key? key}) : super(key: key);
 
   @override
-  _UserEditFormState createState() => _UserEditFormState();
+  _PublisherEditFormState createState() => _PublisherEditFormState();
 }
 
-class _UserEditFormState extends State<UserEditForm> {
+class _PublisherEditFormState extends State<PublisherEditForm> {
   final _form = GlobalKey<FormState>();
 
   ///agrupa os dados do formulário após a validação
@@ -34,19 +33,19 @@ class _UserEditFormState extends State<UserEditForm> {
 
       _form.currentState?.save();
 
-      _formData['id'] = widget.user.id.toString();
+      _formData['id'] = widget.publisher.id.toString();
 
       setState(() => _isLoading = true);
 
       try {
-        await Provider.of<UserProvider>(
+        await Provider.of<PublisherProvider>(
           context,
           listen: false,
-        ).saveUser(_formData).then((value) {
+        ).savePublisher(_formData).then((value) {
           msg.showSnackBar(
             SnackBar(
               content: const Text(
-                'Usuário alterado com sucesso.',
+                'Editora alterada com sucesso.',
                 style: TextStyle(fontSize: 17),
               ),
               backgroundColor: Colors.green[400],
@@ -74,7 +73,7 @@ class _UserEditFormState extends State<UserEditForm> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Usuário'),
+        title: const Text('Editar Editora'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -91,10 +90,10 @@ class _UserEditFormState extends State<UserEditForm> {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  initialValue: widget.user.name,
+                  initialValue: widget.publisher.name,
                   decoration: const InputDecoration(
                     labelText: 'Nome',
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.my_library_books_rounded),
                   ),
                   onSaved: (newValue) =>
                       _formData['name'] = newValue.toString(),
@@ -109,25 +108,7 @@ class _UserEditFormState extends State<UserEditForm> {
                   },
                 ),
                 TextFormField(
-                  initialValue: widget.user.address,
-                  decoration: const InputDecoration(
-                    labelText: 'Endereço',
-                    prefixIcon: Icon(Icons.location_on),
-                  ),
-                  onSaved: (newValue) =>
-                      _formData['address'] = newValue.toString(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    } else if (value.length < 5) {
-                      return 'No mínimo 5 caracteres.';
-                    } else if (value.length > 50) {
-                      return 'No máximo 50 caracteres.';
-                    }
-                  },
-                ),
-                TextFormField(
-                  initialValue: widget.user.city,
+                  initialValue: widget.publisher.city,
                   decoration: const InputDecoration(
                     labelText: 'Cidade',
                     prefixIcon: Icon(Icons.location_city_rounded),
@@ -141,24 +122,6 @@ class _UserEditFormState extends State<UserEditForm> {
                       return 'No mínimo 3 caracteres.';
                     } else if (value.length > 50) {
                       return 'No máximo 20 caracteres.';
-                    }
-                  },
-                ),
-                TextFormField(
-                  initialValue: widget.user.email,
-                  decoration: const InputDecoration(
-                    labelText: 'E-mail',
-                    prefixIcon: Icon(Icons.mail),
-                  ),
-                  onSaved: (newValue) =>
-                      _formData['email'] = newValue.toString(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    } else if (!EmailValidator.validate(value)) {
-                      return 'E-mail inválido.';
-                    } else if (value.length > 50) {
-                      return 'No máximo 100 caracteres.';
                     }
                   },
                 ),

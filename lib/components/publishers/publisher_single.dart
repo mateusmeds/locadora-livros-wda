@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/publishers/publisher_edit.dart';
 import 'package:livraria_wda/components/users/user_edit.dart';
 import 'package:livraria_wda/models/publisher.dart';
 import 'package:livraria_wda/models/user.dart';
@@ -102,13 +103,13 @@ class PublisherSingle extends StatelessWidget {
         children: <Widget>[
           FloatingActionButton(
             onPressed: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (BuildContext context) => UserEditForm(
-              //       user: user,
-              //     ),
-              //   ),
-              // );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => PublisherEditForm(
+                    publisher: publisher,
+                  ),
+                ),
+              );
             },
             child: Icon(Icons.edit),
             heroTag: null,
