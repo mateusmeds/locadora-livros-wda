@@ -1,26 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/books/book_single.dart';
-import 'package:livraria_wda/main.dart';
 import 'package:livraria_wda/models/book.dart';
-import 'package:livraria_wda/models/publisher.dart';
 
 class BooksList extends StatelessWidget {
-  const BooksList({Key? key}) : super(key: key);
+  final List<Book> books;
+  const BooksList({required this.books, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<Book> books = [
-      Book(1, 'Miguel de Cervantes', 'Dom Quixote',
-          Publisher(1, 'Aleph', 'Natal'), 5, 1605, 0),
-      Book(2, 'Liev Tolstói', 'Guerra e Paz', Publisher(2, 'Suma', 'São Paulo'),
-          3, 1869, 0),
-      Book(3, 'Thomas Mann', 'A Montanha Mágica',
-          Publisher(3, 'Darkside Books', 'Rio de Janeiro'), 10, 1924, 0),
-      Book(4, 'Gabriel García Márquez', 'Cem Anos de Solidão',
-          Publisher(3, 'Editora Rocco', 'Rio de Janeiro'), 30, 1967, 0),
-      Book(5, 'Liev Tolstói', 'Gabriel García Márquez',
-          Publisher(3, 'Editora Intrínseca', 'Fortaleza'), 6, 1913, 0),
-    ];
 
     return Expanded(
       child: ListView.builder(
