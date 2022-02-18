@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/components/books/book_edit.dart';
 import 'package:livraria_wda/models/book.dart';
+import 'package:livraria_wda/providers/BookProvider.dart';
+import 'package:provider/provider.dart';
 
 class BookSingle extends StatelessWidget {
   final Book book;
@@ -8,6 +13,63 @@ class BookSingle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bookProvider = Provider.of<BookProvider>(context);
+    final bookAtt = bookProvider.bookById(book.id);
+    final msg = ScaffoldMessenger.of(context);
+
+    void onDelete() {
+      showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Excluir Livro'),
+          content: const Text('Tem certeza?'),
+          actions: [
+            TextButton(
+              child: const Text('Não'),
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+            TextButton(
+                child: const Text('Sim'),
+                onPressed: () {
+                  Navigator.of(ctx).pop(true);
+                }),
+          ],
+        ),
+      ).then((value) async {
+        if (value ?? false) {
+          try {
+            await Provider.of<BookProvider>(
+              context,
+              listen: false,
+            ).removeBook(bookAtt).then((value) {
+              Navigator.of(context).pop();
+              msg.showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Livro excluído com sucesso.',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  backgroundColor: Colors.green[400],
+                  duration: Duration(seconds: 5),
+                ),
+              );
+            });
+          } on HttpException catch (error) {
+            msg.showSnackBar(
+              SnackBar(
+                content: Text(
+                  error.toString().replaceAll('HttpException: ', 'Erro: '),
+                  style: TextStyle(fontSize: 17),
+                ),
+                backgroundColor: Colors.red[400],
+                duration: Duration(seconds: 5),
+              ),
+            );
+          }
+        }
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Livro'),
@@ -31,7 +93,7 @@ class BookSingle extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      book.name,
+                      bookAtt.name,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -58,7 +120,7 @@ class BookSingle extends StatelessWidget {
                         const SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            book.publisher.name,
+                            bookAtt.publisher.name,
                           ),
                         ),
                       ],
@@ -80,7 +142,7 @@ class BookSingle extends StatelessWidget {
                         const SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            book.author,
+                            bookAtt.author,
                           ),
                         ),
                       ],
@@ -102,7 +164,7 @@ class BookSingle extends StatelessWidget {
                         const SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            book.releaseYear.toString(),
+                            bookAtt.releaseYear.toString(),
                           ),
                         ),
                       ],
@@ -117,16 +179,31 @@ class BookSingle extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.event_available,
-                          color: Colors.green,
+                          color: Colors.black54,
                         ),
                         const SizedBox(width: 5),
-                        Flexible(
-                          child: Text(
-                            (book.quantity - book.totalRented).toString(),
-                          ),
-                        ),
+                        bookAtt.quantity > 0
+                            ? Text(
+                                'Disponíveis: ${bookAtt.quantity.toString()}')
+                            : Flexible(
+                                fit: FlexFit.loose,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(width: 1, color: Colors.red),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  child: Text(
+                                    'Indisponível',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ),
@@ -143,20 +220,20 @@ class BookSingle extends StatelessWidget {
         children: <Widget>[
           FloatingActionButton(
             onPressed: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (BuildContext context) => UserEditForm(
-              //       user: user,
-              //     ),
-              //   ),
-              // );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => BookEditForm(
+                    bookAtt,
+                  ),
+                ),
+              );
             },
             child: Icon(Icons.edit),
             heroTag: null,
           ),
           SizedBox(height: 20),
           FloatingActionButton(
-            onPressed: () {},
+            onPressed: onDelete,
             child: Icon(Icons.delete_forever_rounded),
             heroTag: null,
             backgroundColor: Colors.red[400],

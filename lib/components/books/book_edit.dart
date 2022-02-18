@@ -1,23 +1,28 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:livraria_wda/models/book.dart';
 import 'package:livraria_wda/models/publisher.dart';
 import 'package:livraria_wda/providers/BookProvider.dart';
 import 'package:livraria_wda/providers/PublisherProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:select_form_field/select_form_field.dart';
 
-class BookRegisterForm extends StatefulWidget {
-  const BookRegisterForm({Key? key}) : super(key: key);
+class BookEditForm extends StatefulWidget {
+  final Book book;
+  const BookEditForm(this.book, {Key? key}) : super(key: key);
 
   @override
-  _BookRegisterFormState createState() => _BookRegisterFormState();
+  _BookEditFormState createState() => _BookEditFormState();
 }
 
-class _BookRegisterFormState extends State<BookRegisterForm> {
+class _BookEditFormState extends State<BookEditForm> {
   @override
   void initState() {
     super.initState();
+
+    _selectedPublisher = widget.book.publisher.id.toString();
+
     Provider.of<PublisherProvider>(
       context,
       listen: false,
@@ -38,13 +43,11 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
   final Map<String, Object> _formData = {};
 
   bool _isLoading = false;
-  // Opti
 
   var _selectedPublisher;
 
   @override
   Widget build(BuildContext context) {
-
     final msg = ScaffoldMessenger.of(context);
     final publisherProvider = Provider.of<PublisherProvider>(context);
 
@@ -56,29 +59,34 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
       }
 
       _formData['publisher'] = _selectedPublisher;
+      print('object $_selectedPublisher');
+      if (_selectedPublisher.toString().isEmpty) {
+        print('Não selecionou');
+        return;
+      }
 
       Publisher publisher = await Provider.of<PublisherProvider>(
         context,
         listen: false,
       ).publisherById(int.parse(_selectedPublisher));
 
-
       if (publisher.id < 0) {
         msg.showSnackBar(
-            SnackBar(
-              content: Text(
-                'Editora não selecionada.',
-                style: TextStyle(fontSize: 17),
-              ),
-              backgroundColor: Colors.red[400],
-              duration: Duration(seconds: 5),
+          SnackBar(
+            content: Text(
+              'Editora não selecionada.',
+              style: TextStyle(fontSize: 17),
             ),
-          );
+            backgroundColor: Colors.red[400],
+            duration: Duration(seconds: 5),
+          ),
+        );
       }
 
       _form.currentState?.save();
 
-      _formData['id'] = '0';
+      _formData['id'] = widget.book.id.toString();
+      _formData['totalRented'] = widget.book.totalRented;
 
       setState(() => _isLoading = true);
 
@@ -90,7 +98,7 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
           msg.showSnackBar(
             SnackBar(
               content: Text(
-                'Livro cadastrado com sucesso.',
+                'Livro atualizado com sucesso.',
                 style: TextStyle(fontSize: 17),
               ),
               backgroundColor: Colors.green[400],
@@ -124,7 +132,7 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastrar Livro'),
+        title: Text('Editar Livro'),
       ),
       body: _isLoading
           ? const Center(
@@ -161,6 +169,7 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                             return 'No máximo 30 caracteres.';
                           }
                         },
+                        initialValue: widget.book.name,
                       ),
                       DropdownButton<String>(
                         hint: Container(
@@ -192,8 +201,10 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                           });
                         },
                         value: _selectedPublisher,
+                        
                       ),
                       TextFormField(
+                        initialValue: widget.book.author,
                         decoration: const InputDecoration(
                           labelText: 'Autor',
                           prefixIcon: Icon(Icons.person),
@@ -211,6 +222,7 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                         },
                       ),
                       TextFormField(
+                        initialValue: widget.book.releaseYear.toString(),
                         decoration: const InputDecoration(
                           labelText: 'Ano de lançamento',
                           prefixIcon: Icon(Icons.date_range),
@@ -222,10 +234,11 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                             return 'Campo obrigatório.';
                           } else if (value.length < 4) {
                             return 'Precisa ser 4 Dígitos.';
-                          } 
+                          }
                         },
                       ),
                       TextFormField(
+                        initialValue: widget.book.quantity.toString(),
                         decoration: const InputDecoration(
                           labelText: 'Quantidade',
                           prefixIcon: Icon(Icons.add),

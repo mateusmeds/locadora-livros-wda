@@ -49,8 +49,6 @@ class PublisherProvider with ChangeNotifier {
 
     bool hasId = publisherId != 0;
 
-    if (data.keys.contains('id')) {}
-
     final publisher = Publisher(
       hasId ? publisherId! : 0,
       data['name'] as String,

@@ -8,7 +8,6 @@ class BooksList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Expanded(
       child: ListView.builder(
         itemCount: books.length,
@@ -40,7 +39,9 @@ class BooksList extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => BookSingle(book: book,),
+                      builder: (BuildContext context) => BookSingle(
+                        book: book,
+                      ),
                     ),
                   );
                 },
@@ -81,6 +82,46 @@ class BooksList extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        book.quantity > 0
+                            ? Flexible(
+                                fit: FlexFit.loose,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(width: 1, color: Colors.green),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 2),
+                                  child: Text(
+                                    'Disponível',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.green),
+                                  ),
+                                ),
+                              )
+                            : Flexible(
+                                fit: FlexFit.loose,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(width: 1, color: Colors.red),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 2),
+                                  child: Text(
+                                    'Indisponível',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ],
