@@ -5,7 +5,6 @@ import 'package:livraria_wda/models/publisher.dart';
 import 'package:livraria_wda/providers/BookProvider.dart';
 import 'package:livraria_wda/providers/PublisherProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:select_form_field/select_form_field.dart';
 
 class BookRegisterForm extends StatefulWidget {
   const BookRegisterForm({Key? key}) : super(key: key);
