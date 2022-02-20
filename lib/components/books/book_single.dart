@@ -5,6 +5,7 @@ import 'package:livraria_wda/components/books/book_edit.dart';
 import 'package:livraria_wda/models/book.dart';
 import 'package:livraria_wda/providers/BookProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:show_status_container/show_status_container.dart';
 
 class BookSingle extends StatelessWidget {
   final Book book;
@@ -187,22 +188,11 @@ class BookSingle extends StatelessWidget {
                         bookAtt.quantity > 0
                             ? Text(
                                 'Disponíveis: ${bookAtt.quantity.toString()}')
-                            : Flexible(
-                                fit: FlexFit.loose,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(width: 1, color: Colors.red),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
-                                  child: Text(
-                                    'Indisponível',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
+                            : const ShowStatusContainer(
+                                statusText: 'Indisponível',
+                                colorText: Colors.red,
+                                colorContainer: Colors.red,
+                                textFontSize: 17,
                               ),
                       ],
                     ),

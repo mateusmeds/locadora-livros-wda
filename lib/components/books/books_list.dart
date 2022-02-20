@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/books/book_single.dart';
 import 'package:livraria_wda/models/book.dart';
+import 'package:show_status_container/show_status_container.dart';
 
 class BooksList extends StatelessWidget {
   final List<Book> books;
@@ -88,39 +89,17 @@ class BooksList extends StatelessWidget {
                     Row(
                       children: [
                         book.quantity > 0
-                            ? Flexible(
-                                fit: FlexFit.loose,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(width: 1, color: Colors.green),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 2),
-                                  child: Text(
-                                    'Disponível',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.green),
-                                  ),
-                                ),
+                            ? const ShowStatusContainer(
+                                statusText: 'Disponível',
+                                colorText: Colors.green,
+                                colorContainer: Colors.green,
+                                textFontSize: 16,
                               )
-                            : Flexible(
-                                fit: FlexFit.loose,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(width: 1, color: Colors.red),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 2),
-                                  child: Text(
-                                    'Indisponível',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
+                            : const ShowStatusContainer(
+                                statusText: 'Indisponível',
+                                colorText: Colors.red,
+                                colorContainer: Colors.red,
+                                textFontSize: 16,
                               ),
                       ],
                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:livraria_wda/models/book_rent.dart';
+import 'package:show_status_container/show_status_container.dart';
 
 class BookRentSingle extends StatelessWidget {
   final BookRent bookRent;
@@ -182,65 +183,33 @@ class BookRentSingle extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                                color: bookRent.devolutionDate == 'null'
-                                    ? Colors.orange
-                                    : Colors.blue,
+                        bookRent.devolutionDate == 'null'
+                            ? const ShowStatusContainer(
+                                statusText: 'Não devolvido',
+                                colorText: Colors.orange,
+                                colorContainer: Colors.orange,
+                                textFontSize: 17,
+                              )
+                            : const ShowStatusContainer(
+                                statusText: 'Devolvido',
+                                colorText: Colors.blue,
+                                colorContainer: Colors.blue,
+                                textFontSize: 17,
                               ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            child: bookRent.devolutionDate == 'null'
-                                ? Text(
-                                    'Não devolvido',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.orange, fontSize: 16),
-                                  )
-                                : Text(
-                                    'Devolvido',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.blue, fontSize: 16),
-                                  ),
-                          ),
-                        ),
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                                color: !returnedBookDelayed
-                                    ? Colors.green
-                                    : Colors.red,
+                        const SizedBox(width: 10),
+                        !returnedBookDelayed
+                            ? const ShowStatusContainer(
+                                statusText: 'No prazo',
+                                colorText: Colors.green,
+                                colorContainer: Colors.green,
+                                textFontSize: 17,
+                              )
+                            : const ShowStatusContainer(
+                                statusText: 'Atrasado',
+                                colorText: Colors.red,
+                                colorContainer: Colors.red,
+                                textFontSize: 17,
                               ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            margin: EdgeInsets.only(left: 10),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            child: !returnedBookDelayed
-                                ? Text(
-                                    'No prazo',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.green, fontSize: 16),
-                                  )
-                                : Text(
-                                    'Atrasado',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 16),
-                                  ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -271,7 +240,7 @@ class BookRentSingle extends StatelessWidget {
                   heroTag: null,
                 )
               : SizedBox(height: 0),
-              //Verificação para ver se vai precisar colocar espaçamento vertical entre os botões
+          //Verificação para ver se vai precisar colocar espaçamento vertical entre os botões
           bookRent.devolutionDate == 'null'
               ? SizedBox(height: 20)
               : SizedBox(height: 0),
