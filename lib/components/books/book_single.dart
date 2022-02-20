@@ -109,7 +109,7 @@ class BookSingle extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey[200],
+                      color: Colors.grey[300],
                     ),
                     child: Row(
                       children: [
@@ -131,7 +131,7 @@ class BookSingle extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey[200],
+                      color: Colors.grey[300],
                     ),
                     child: Row(
                       children: [
@@ -153,7 +153,7 @@ class BookSingle extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey[200],
+                      color: Colors.grey[300],
                     ),
                     child: Row(
                       children: [
@@ -175,7 +175,7 @@ class BookSingle extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey[200],
+                      color: Colors.grey[300],
                     ),
                     child: Row(
                       children: [

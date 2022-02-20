@@ -7,7 +7,7 @@ class BookRent {
   Book _book;
   String _rentalDate;
   String _previsionDate;
-  String _devolutionDate = '';
+  String? _devolutionDate;
 
   BookRent(
     this._id,
@@ -39,6 +39,6 @@ class BookRent {
   }
 
   String get devolutionDate {
-    return _devolutionDate;
+    return _devolutionDate!;
   }
 }

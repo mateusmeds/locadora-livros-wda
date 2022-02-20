@@ -14,12 +14,19 @@ class BookRentSingle extends StatelessWidget {
         DateFormat('y-MM-dd').parse(bookRent.previsionDate);
     final DateTime rentalDate =
         DateFormat('y-MM-dd').parse(bookRent.rentalDate);
-    var previsionDateSring = '';
+    var devolutionDate = '';
 
-    if (bookRent.devolutionDate != '') {
-      final DateTime previsionDate =
-          DateFormat('y-MM-dd').parse(bookRent.previsionDate);
-      previsionDateSring = DateFormat('dd/MM/y').format(previsionDate);
+    bool returnedBookDelayed = false;
+
+    if (bookRent.devolutionDate != '' && bookRent.devolutionDate != 'null') {
+      final DateTime devolutionDateParse =
+          DateFormat('y-MM-dd').parse(bookRent.devolutionDate);
+
+      //Verifica se o livro foi entregue atrasado
+      if (devolutionDateParse.difference(previsionDate).inDays > 0) {
+        returnedBookDelayed = true;
+      }
+      devolutionDate = DateFormat('dd/MM/y').format(devolutionDateParse);
     }
 
     return Scaffold(
@@ -160,7 +167,7 @@ class BookRentSingle extends StatelessWidget {
                         const SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            'Data de devolução: $previsionDateSring',
+                            'Data de devolução: $devolutionDate',
                           ),
                         ),
                       ],
@@ -179,67 +186,59 @@ class BookRentSingle extends StatelessWidget {
                           fit: FlexFit.loose,
                           child: Container(
                             decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.orange),
+                              border: Border.all(
+                                width: 1,
+                                color: bookRent.devolutionDate == 'null'
+                                    ? Colors.orange
+                                    : Colors.blue,
+                              ),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
-                            child: Text(
-                              'Não devolvido',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.orange),
-                            ),
+                            child: bookRent.devolutionDate == 'null'
+                                ? Text(
+                                    'Não devolvido',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.orange, fontSize: 16),
+                                  )
+                                : Text(
+                                    'Devolvido',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 16),
+                                  ),
                           ),
                         ),
-                        SizedBox(width: 5,),
                         Flexible(
                           fit: FlexFit.loose,
                           child: Container(
                             decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.red),
+                              border: Border.all(
+                                width: 1,
+                                color: !returnedBookDelayed
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
                               borderRadius: BorderRadius.circular(20),
                             ),
+                            margin: EdgeInsets.only(left: 10),
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
-                            child: Text(
-                              'Atraso',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 5,),
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.green),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            child: Text(
-                              'No prazo',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.green),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 5,),
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            child: Text(
-                              'Devolvido',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.blue),
-                            ),
+                            child: !returnedBookDelayed
+                                ? Text(
+                                    'No prazo',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.green, fontSize: 16),
+                                  )
+                                : Text(
+                                    'Atrasado',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 16),
+                                  ),
                           ),
                         ),
                       ],
@@ -256,26 +255,34 @@ class BookRentSingle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton(
-            onPressed: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (BuildContext context) => UserEditForm(
-              //       user: user,
-              //     ),
-              //   ),
-              // );
-            },
-            child: Icon(Icons.check),
-            heroTag: null,
-          ),
-          SizedBox(height: 20),
-          FloatingActionButton(
-            onPressed: () {},
-            child: Icon(Icons.delete_forever_rounded),
-            heroTag: null,
-            backgroundColor: Colors.red[400],
-          ),
+          bookRent.devolutionDate == 'null'
+              ? FloatingActionButton(
+                  onPressed: () {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (BuildContext context) => UserEditForm(
+                    //       user: user,
+                    //     ),
+                    //   ),
+                    // );
+                  },
+                  child: Icon(Icons.check),
+                  backgroundColor: Colors.green,
+                  heroTag: null,
+                )
+              : SizedBox(height: 0),
+              //Verificação para ver se vai precisar colocar espaçamento vertical entre os botões
+          bookRent.devolutionDate == 'null'
+              ? SizedBox(height: 20)
+              : SizedBox(height: 0),
+          bookRent.devolutionDate == 'null'
+              ? FloatingActionButton(
+                  onPressed: () {},
+                  child: Icon(Icons.delete_forever_rounded),
+                  heroTag: null,
+                  backgroundColor: Colors.red[400],
+                )
+              : const SizedBox(width: 0)
         ],
       ),
     );
