@@ -46,12 +46,12 @@ class BookSingle extends StatelessWidget {
               Navigator.of(context).pop();
               msg.showSnackBar(
                 SnackBar(
-                  content: Text(
+                  content: const Text(
                     'Livro excluído com sucesso.',
                     style: TextStyle(fontSize: 17),
                   ),
                   backgroundColor: Colors.green[400],
-                  duration: Duration(seconds: 5),
+                  duration: const Duration(seconds: 5),
                 ),
               );
             });
@@ -60,10 +60,10 @@ class BookSingle extends StatelessWidget {
               SnackBar(
                 content: Text(
                   error.toString().replaceAll('HttpException: ', 'Erro: '),
-                  style: TextStyle(fontSize: 17),
+                  style: const TextStyle(fontSize: 17),
                 ),
                 backgroundColor: Colors.red[400],
-                duration: Duration(seconds: 5),
+                duration: const Duration(seconds: 5),
               ),
             );
           }
@@ -180,7 +180,7 @@ class BookSingle extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.event_available,
                           color: Colors.black54,
                         ),
@@ -218,13 +218,13 @@ class BookSingle extends StatelessWidget {
                 ),
               );
             },
-            child: Icon(Icons.edit),
+            child: const Icon(Icons.edit),
             heroTag: null,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           FloatingActionButton(
             onPressed: onDelete,
-            child: Icon(Icons.delete_forever_rounded),
+            child: const Icon(Icons.delete_forever_rounded),
             heroTag: null,
             backgroundColor: Colors.red[400],
           ),

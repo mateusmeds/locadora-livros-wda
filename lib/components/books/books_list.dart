@@ -93,13 +93,11 @@ class BooksList extends StatelessWidget {
                                 statusText: 'Disponível',
                                 colorText: Colors.green,
                                 colorContainer: Colors.green,
-                                textFontSize: 16,
                               )
                             : const ShowStatusContainer(
                                 statusText: 'Indisponível',
                                 colorText: Colors.red,
                                 colorContainer: Colors.red,
-                                textFontSize: 16,
                               ),
                       ],
                     ),

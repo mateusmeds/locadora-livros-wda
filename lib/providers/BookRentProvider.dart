@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:livraria_wda/models/book.dart';
 import 'package:livraria_wda/models/book_rent.dart';
 import 'package:livraria_wda/models/publisher.dart';
@@ -95,77 +96,88 @@ class BookRentProvider with ChangeNotifier {
   //   return Publisher(-100, '@anonimo', '@anonimo');
   // }
 
-  // Future<void> saveBook(Map<String, Object> data, Publisher pub) {
-  //   print('OIII');
-  //   final int bookId = int.parse(data['id'].toString());
-  //   final int publisherId = int.parse(data['publisher'].toString());
+  Future<void> saveBookRental(Map<String, Object> data, Book book, User user) {
+    final int bookRentalId = int.parse(data['id'].toString());
 
-  //   print(bookId);
-  //   print(publisherId);
+    bool hasId = bookRentalId > 0;
 
-  //   bool hasId = bookId != 0;
+    final bookRental = BookRent(
+      hasId ? bookRentalId : 0,
+      user,
+      book,
+      data['rentalDate'].toString(),
+      data['previsionDate'].toString(),
+      'null',
+    );
 
-  //   final book = Book(
-  //     hasId ? bookId : 0,
-  //     data['author'].toString(),
-  //     data['name'].toString(),
-  //     pub,
-  //     int.parse(data['quantity'].toString()),
-  //     int.parse(data['releaseYear'].toString()),
-  //     hasId ? int.parse(data['totalRented'].toString()) : 0,
-  //   );
+    // if (hasId) {
+      // return updateBook(book);
+    // } else {
+      return addBookRental(bookRental);
+    // }
+  }
 
-  //   if (hasId) {
-  //     return updateBook(book);
-  //   } else {
-  //     return addBook(book);
-  //   }
-  // }
+  Future<void> addBookRental(BookRent bookRental) async {
+    DateTime rentalDateFormat = DateFormat('dd/MM/y').parse(bookRental.rentalDate);
+    DateTime previsionDateFormat = DateFormat('dd/MM/y').parse(bookRental.previsionDate);
 
-  // Future<void> addBook(Book book) async {
-  //   final response = await http.post(
-  //     Uri.parse('http://livraria--back.herokuapp.com/api/livro'),
-  //     headers: {'content-type': 'application/json'},
-  //     body: jsonEncode(
-  //       {
-  //         "autor": book.author,
-  //         "editora": {
-  //           "cidade": book.publisher.city,
-  //           "id": book.publisher.id,
-  //           "nome": book.publisher.name
-  //         },
-  //         "id": book.id,
-  //         "lancamento": book.releaseYear,
-  //         "nome": book.name,
-  //         "quantidade": book.quantity,
-  //         "totalalugado": book.totalRented,
-  //       },
-  //     ),
-  //   );
+    final response = await http.post(
+      Uri.parse('http://livraria--back.herokuapp.com/api/aluguel'),
+      headers: {'content-type': 'application/json'},
+      body: jsonEncode(
+        {
+          "data_aluguel":  DateFormat('y-MM-dd').format(rentalDateFormat),
+          "data_devolucao": "",
+          "data_previsao": DateFormat('y-MM-dd').format(previsionDateFormat),
+          "id": 0,
+          "livro_id": {
+            "autor": bookRental.book.author,
+            "editora": {
+              "cidade": bookRental.book.publisher.city,
+              "id": bookRental.book.publisher.id,
+              "nome": bookRental.book.publisher.name,
+            },
+            "id": bookRental.book.id,
+            "lancamento": bookRental.book.releaseYear,
+            "nome": bookRental.book.name,
+            "quantidade": bookRental.book.quantity,
+            "totalalugado": bookRental.book.totalRented,
+          },
+          "usuario_id": {
+            "cidade": bookRental.user.city,
+            "email": bookRental.user.email,
+            "endereco": bookRental.user.address,
+            "id": bookRental.user.id,
+            "nome": bookRental.user.name
+          }
+        },
+      ),
+    );
 
-  //   if (response.statusCode == 200) {
-  //     //Pegando id do livro cadastrado
-  //     final bookId = jsonDecode(response.body)['id'];
+    print(jsonDecode(response.body));
 
-  //     books.add(Book(
-  //       bookId,
-  //       book.author,
-  //       book.name,
-  //       book.publisher,
-  //       book.quantity,
-  //       book.releaseYear,
-  //       book.totalRented,
-  //     ));
+    if (response.statusCode == 200) {
+      //Pegando id do aluguel cadastrado
+      final bookRentalId = jsonDecode(response.body)['id'];
 
-  //     notifyListeners();
-  //   } else if (response.statusCode == 400) {
-  //     throw HttpException(jsonDecode(response.body)['error']);
-  //   } else {
-  //     throw const HttpException(
-  //       'Ocorreu um erro ao tentar salvar o livro.',
-  //     );
-  //   }
-  // }
+      _booksRental.add(BookRent(
+        bookRentalId,
+        bookRental.user,
+        bookRental.book,
+        bookRental.rentalDate,
+        bookRental.previsionDate,
+        bookRental.devolutionDate,
+      ));
+
+      notifyListeners();
+    } else if (response.statusCode == 400) {
+      throw HttpException(jsonDecode(response.body)['error']);
+    } else {
+      throw const HttpException(
+        'Ocorreu um erro ao tentar salvar o aluguel do livro.',
+      );
+    }
+  }
 
   // Future<void> updateBook(Book book) async {
   //   //Pegando index do livro para poder substituir

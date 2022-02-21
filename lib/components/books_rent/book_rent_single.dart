@@ -11,10 +11,16 @@ class BookRentSingle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Convertendo datas de String para DateTime
-    final DateTime previsionDate =
-        DateFormat('y-MM-dd').parse(bookRent.previsionDate);
-    final DateTime rentalDate =
-        DateFormat('y-MM-dd').parse(bookRent.rentalDate);
+    DateTime previsionDate;
+    DateTime rentalDate;
+
+    try {
+      previsionDate = DateFormat('y-MM-dd').parse(bookRent.previsionDate);
+      rentalDate = DateFormat('y-MM-dd').parse(bookRent.rentalDate);
+    } catch (e) {
+      previsionDate = DateFormat('dd/MM/y').parse(bookRent.previsionDate);
+      rentalDate = DateFormat('dd/MM/y').parse(bookRent.rentalDate);
+    }
     var devolutionDate = '';
 
     bool returnedBookDelayed = false;
@@ -28,6 +34,8 @@ class BookRentSingle extends StatelessWidget {
         returnedBookDelayed = true;
       }
       devolutionDate = DateFormat('dd/MM/y').format(devolutionDateParse);
+    } else if (DateTime.now().difference(previsionDate).inDays > 0) {
+      returnedBookDelayed = true;
     }
 
     return Scaffold(

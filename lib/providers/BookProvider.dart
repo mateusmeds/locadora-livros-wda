@@ -8,8 +8,10 @@ import 'package:http/http.dart' as http;
 import 'package:livraria_wda/providers/PublisherProvider.dart';
 
 class BookProvider with ChangeNotifier {
+  // List<Book> _availableBooks = [];
   List<Book> _books = [];
 
+  // List<Book> get availableBooks => _availableBooks;
   List<Book> get books => _books;
 
   Future<void> loadBooks() async {
@@ -17,6 +19,37 @@ class BookProvider with ChangeNotifier {
 
     final response = await http.get(
       Uri.parse('http://livraria--back.herokuapp.com/api/livros'),
+      headers: {'content-type': 'application/json'},
+    );
+
+    List<dynamic> booksData = jsonDecode(response.body);
+
+    for (var book in booksData) {
+      _books.add(
+        Book(
+          book['id'],
+          book['autor'],
+          book['nome'],
+          Publisher(
+            book['editora']['id'],
+            book['editora']['nome'],
+            book['editora']['cidade'],
+          ),
+          book['quantidade'],
+          book['lancamento'],
+          book['totalalugado'],
+        ),
+      );
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> loadAvailableBooks() async {
+    _books.clear();
+
+    final response = await http.get(
+      Uri.parse('http://livraria--back.herokuapp.com/api/disponiveis'),
       headers: {'content-type': 'application/json'},
     );
 
