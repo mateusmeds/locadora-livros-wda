@@ -264,9 +264,9 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
                   onTap: () {
                     showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(Duration(days: 2)),
+                      initialDate: DateTime.now().add(Duration(hours: 3)),
+                      firstDate: DateTime.now().add(Duration(hours: 3)),
+                      lastDate: DateTime.now().add(Duration(hours: 3)),
                     ).then((pickedDate) {
                       if (pickedDate == null) {
                         return;
@@ -295,9 +295,9 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
                   onTap: () {
                     showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(Duration(days: 90)),
+                      initialDate: DateTime.now().add(Duration(hours: 3)),
+                      firstDate: DateTime.now().add(Duration(hours: 3)),
+                      lastDate: DateTime.now().add(Duration(days: 30)),
                     ).then((pickedDate) {
                       if (pickedDate == null) {
                         return;

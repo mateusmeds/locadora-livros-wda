@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:livraria_wda/models/book_rent.dart';
+import 'package:livraria_wda/providers/BookRentProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:show_status_container/show_status_container.dart';
 
 class BookRentSingle extends StatelessWidget {
@@ -10,6 +12,10 @@ class BookRentSingle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bookRentalProvider =
+        Provider.of<BookRentProvider>(context, listen: false);
+    final msg = ScaffoldMessenger.of(context);
+
     //Convertendo datas de String para DateTime
     DateTime previsionDate;
     DateTime rentalDate;
@@ -235,13 +241,32 @@ class BookRentSingle extends StatelessWidget {
           bookRent.devolutionDate == 'null'
               ? FloatingActionButton(
                   onPressed: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (BuildContext context) => UserEditForm(
-                    //       user: user,
-                    //     ),
-                    //   ),
-                    // );
+                    bookRentalProvider.returnBook(bookRent).then((value) {
+                      Navigator.of(context).pop();
+                      msg.showSnackBar(
+                        SnackBar(
+                          content: const Text(
+                            'Livro devolvido com sucesso',
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          backgroundColor: Colors.green[400],
+                          duration: const Duration(seconds: 5),
+                        ),
+                      );
+                    }).catchError((onError) {
+                      msg.showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            onError
+                                .toString()
+                                .replaceAll('HttpException: ', 'Erro: '),
+                            style: const TextStyle(fontSize: 17),
+                          ),
+                          backgroundColor: Colors.red[400],
+                          duration: const Duration(seconds: 5),
+                        ),
+                      );
+                    });
                   },
                   child: Icon(Icons.check),
                   backgroundColor: Colors.green,

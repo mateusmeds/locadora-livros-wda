@@ -23,7 +23,8 @@ class BookRentProvider with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
-      List<dynamic> booksRentalData = jsonDecode(response.body);
+      List<dynamic> booksRentalData =
+          jsonDecode(utf8.decode(response.body.codeUnits));
 
       for (var bookRent in booksRentalData) {
         _booksRental.add(BookRent(
@@ -61,20 +62,20 @@ class BookRentProvider with ChangeNotifier {
     return false;
   }
 
-  // Book bookById(int id) {
-  //   if (_books.any((element) => element.id == id)) {
-  //     return _books.firstWhere((element) => element.id == id);
-  //   }
-  //   return Book(
-  //     -100,
-  //     '@anonimo',
-  //     '@anonimo',
-  //     Publisher(-100, '@anonimo', '@anonimo'),
-  //     1,
-  //     1,
-  //     1,
-  //   );
-  // }
+  BookRent bookRentalById(int id) {
+    if (_booksRental.any((element) => element.id == id)) {
+      return _booksRental.firstWhere((element) => element.id == id);
+    }
+    return BookRent(
+      -100,
+      User(-100, '_name', '_email', '_address', '_city'),
+      Book(-100, '_author', '_name', Publisher(-100, '_name', '_city'), -100,
+          2000, -100),
+      DateTime.now().toString(),
+      DateTime.now().toString(),
+      DateTime.now().toString(),
+    );
+  }
 
   // Future<Publisher> getPublisher(int id) async {
   //   final response = await http.get(
@@ -97,12 +98,8 @@ class BookRentProvider with ChangeNotifier {
   // }
 
   Future<void> saveBookRental(Map<String, Object> data, Book book, User user) {
-    final int bookRentalId = int.parse(data['id'].toString());
-
-    bool hasId = bookRentalId > 0;
-
     final bookRental = BookRent(
-      hasId ? bookRentalId : 0,
+      0,
       user,
       book,
       data['rentalDate'].toString(),
@@ -110,23 +107,21 @@ class BookRentProvider with ChangeNotifier {
       'null',
     );
 
-    // if (hasId) {
-      // return updateBook(book);
-    // } else {
-      return addBookRental(bookRental);
-    // }
+    return addBookRental(bookRental);
   }
 
   Future<void> addBookRental(BookRent bookRental) async {
-    DateTime rentalDateFormat = DateFormat('dd/MM/y').parse(bookRental.rentalDate);
-    DateTime previsionDateFormat = DateFormat('dd/MM/y').parse(bookRental.previsionDate);
+    DateTime rentalDateFormat =
+        DateFormat('dd/MM/y').parse(bookRental.rentalDate);
+    DateTime previsionDateFormat =
+        DateFormat('dd/MM/y').parse(bookRental.previsionDate);
 
     final response = await http.post(
       Uri.parse('http://livraria--back.herokuapp.com/api/aluguel'),
       headers: {'content-type': 'application/json'},
       body: jsonEncode(
         {
-          "data_aluguel":  DateFormat('y-MM-dd').format(rentalDateFormat),
+          "data_aluguel": DateFormat('y-MM-dd').format(rentalDateFormat),
           "data_devolucao": "",
           "data_previsao": DateFormat('y-MM-dd').format(previsionDateFormat),
           "id": 0,
@@ -154,8 +149,6 @@ class BookRentProvider with ChangeNotifier {
       ),
     );
 
-    print(jsonDecode(response.body));
-
     if (response.statusCode == 200) {
       //Pegando id do aluguel cadastrado
       final bookRentalId = jsonDecode(response.body)['id'];
@@ -171,7 +164,8 @@ class BookRentProvider with ChangeNotifier {
 
       notifyListeners();
     } else if (response.statusCode == 400) {
-      throw HttpException(jsonDecode(response.body)['error']);
+      throw HttpException(
+          jsonDecode(utf8.decode(response.body.codeUnits))['error']);
     } else {
       throw const HttpException(
         'Ocorreu um erro ao tentar salvar o aluguel do livro.',
@@ -179,44 +173,81 @@ class BookRentProvider with ChangeNotifier {
     }
   }
 
-  // Future<void> updateBook(Book book) async {
-  //   //Pegando index do livro para poder substituir
-  //   int index = _books.indexWhere((p) => p.id == book.id);
+  Future<void> returnBook(BookRent bookRental) async {
+    DateTime rentalDateFormat;
+    DateTime previsionDateFormat;
+    String rentalDateFormatString;
+    String previsionDateFormatString;
 
-  //   if (index >= 0) {
-  //     final response = await http.put(
-  //       Uri.parse('http://livraria--back.herokuapp.com/api/livro'),
-  //       headers: {'content-type': 'application/json'},
-  //       body: jsonEncode(
-  //         {
-  //           "autor": book.author,
-  //           "editora": {
-  //             "cidade": book.publisher.city,
-  //             "id": book.publisher.id,
-  //             "nome": book.publisher.name
-  //           },
-  //           "id": book.id,
-  //           "lancamento": book.releaseYear,
-  //           "nome": book.name,
-  //           "quantidade": book.quantity,
-  //           "totalalugado": book.totalRented,
-  //         },
-  //       ),
-  //     );
+    try {
+      rentalDateFormat = DateFormat('y-MM-dd').parse(bookRental.rentalDate);
+      previsionDateFormat =
+          DateFormat('y-MM-dd').parse(bookRental.previsionDate);
+    } catch (e) {
+      rentalDateFormat = DateFormat('dd/MM/y').parse(bookRental.rentalDate);
+      previsionDateFormat =
+          DateFormat('dd/MM/y').parse(bookRental.previsionDate);
+    }
 
-  //     if (response.statusCode == 200) {
-  //       _books[index] = book;
+    rentalDateFormatString = DateFormat('y-MM-dd').format(rentalDateFormat);
+    previsionDateFormatString =
+        DateFormat('y-MM-dd').format(previsionDateFormat);
 
-  //       notifyListeners();
-  //     } else if (response.statusCode == 400) {
-  //       throw HttpException(jsonDecode(response.body)['error']);
-  //     } else {
-  //       throw const HttpException(
-  //         'Ocorreu um erro ao tentar salvar o livro.',
-  //       );
-  //     }
-  //   }
-  // }
+    //Pegando index do livro para poder substituir
+    int index = _booksRental.indexWhere((p) => p.id == bookRental.id);
+
+    if (index >= 0) {
+      final response = await http.put(
+        Uri.parse('http://livraria--back.herokuapp.com/api/aluguel'),
+        headers: {'content-type': 'application/json'},
+        body: jsonEncode(
+          {
+            "data_aluguel": rentalDateFormatString,
+            "data_devolucao": DateFormat('y-MM-dd')
+                .format(DateTime.now().add(const Duration(hours: 3)))
+                .toString(),
+            "data_previsao": previsionDateFormatString,
+            "id": bookRental.id,
+            "livro_id": {
+              "autor": bookRental.book.author,
+              "editora": {
+                "cidade": bookRental.book.publisher.city,
+                "id": bookRental.book.publisher.id,
+                "nome": bookRental.book.publisher.name,
+              },
+              "id": bookRental.book.id,
+              "lancamento": bookRental.book.releaseYear,
+              "nome": bookRental.book.name,
+              "quantidade": bookRental.book.quantity,
+              "totalalugado": bookRental.book.totalRented,
+            },
+            "usuario_id": {
+              "cidade": bookRental.user.city,
+              "email": bookRental.user.email,
+              "endereco": bookRental.user.address,
+              "id": bookRental.user.id,
+              "nome": bookRental.user.name
+            }
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        bookRental.devolutionDate = DateFormat('y-MM-dd')
+                .format(DateTime.now().add(const Duration(hours: 3)))
+                .toString();
+        _booksRental[index] = bookRental;
+
+        notifyListeners();
+      } else if (response.statusCode == 400) {
+        throw HttpException(jsonDecode(response.body)['error']);
+      } else {
+        throw const HttpException(
+          'Ocorreu um erro ao tentar devolver o livro.',
+        );
+      }
+    }
+  }
 
   // Future<void> removeBook(Book book) async {
   //   int index = _books.indexWhere((u) => u.id == book.id);

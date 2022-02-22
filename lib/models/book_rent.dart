@@ -18,6 +18,10 @@ class BookRent {
     this._devolutionDate,
   );
 
+  set devolutionDate(String value) {
+    _devolutionDate = value;
+  }
+
   int get id {
     return _id;
   }

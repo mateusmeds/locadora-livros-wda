@@ -22,7 +22,7 @@ class PublisherProvider with ChangeNotifier {
       return;
     }
 
-    List<dynamic> publishersData = jsonDecode(response.body);
+    List<dynamic> publishersData = jsonDecode(utf8.decode(response.body.codeUnits));
 
     for (var publisher in publishersData) {
       _publishers.add(
@@ -86,6 +86,10 @@ class PublisherProvider with ChangeNotifier {
       ));
 
       notifyListeners();
+    } else if (response.statusCode == 400) {
+      throw HttpException(
+        jsonDecode(utf8.decode(response.body.codeUnits))['error'],
+      );
     } else {
       throw const HttpException(
         'Ocorreu um erro ao tentar salvar a editora.',
@@ -110,10 +114,16 @@ class PublisherProvider with ChangeNotifier {
         ),
       );
 
+      print(jsonDecode(response.body));
+
       if (response.statusCode == 200) {
         _publishers[index] = publisher;
 
         notifyListeners();
+      } else if (response.statusCode == 400) {
+        throw HttpException(
+          jsonDecode(utf8.decode(response.body.codeUnits))['error'],
+        );
       } else {
         throw const HttpException(
           'Ocorreu um erro ao tentar salvar a editora.',
@@ -143,7 +153,7 @@ class PublisherProvider with ChangeNotifier {
         notifyListeners();
       } else if (response.statusCode == 400) {
         throw HttpException(
-          jsonDecode(response.body)['error']
+          jsonDecode(utf8.decode(response.body.codeUnits))['error'],
         );
       } else {
         throw const HttpException(

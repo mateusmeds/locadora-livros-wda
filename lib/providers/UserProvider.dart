@@ -26,7 +26,7 @@ class UserProvider with ChangeNotifier {
       return;
     }
 
-    List<dynamic> usersData = jsonDecode(response.body);
+    List<dynamic> usersData = jsonDecode(utf8.decode(response.body.codeUnits));
 
     for (var user in usersData) {
       _users.add(
@@ -97,7 +97,7 @@ class UserProvider with ChangeNotifier {
       //E-mail já existe
     } else if (response.statusCode == 400) {
       throw HttpException(
-        jsonDecode(response.body)['error'],
+        jsonDecode(utf8.decode(response.body.codeUnits))['error'],
       );
 
       //Erro inesperado
@@ -133,8 +133,6 @@ class UserProvider with ChangeNotifier {
           },
         ),
       );
-
-      print(jsonDecode(response.body));
 
       if (response.statusCode == 200) {
         _users[index] = user;
@@ -172,9 +170,13 @@ class UserProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         _users.remove(_users[index]);
         notifyListeners();
+      } else if (response.statusCode == 400) {
+        throw HttpException(
+          jsonDecode(utf8.decode(response.body.codeUnits))['error'],
+        );
       } else {
         throw HttpException(
-          jsonDecode(response.body)['error'],
+          "Ocorreu um erro ao tentar remover o usuário. Por favor, tente novamente.",
         );
       }
     } else {

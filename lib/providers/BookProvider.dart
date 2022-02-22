@@ -8,10 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:livraria_wda/providers/PublisherProvider.dart';
 
 class BookProvider with ChangeNotifier {
-  // List<Book> _availableBooks = [];
   List<Book> _books = [];
 
-  // List<Book> get availableBooks => _availableBooks;
   List<Book> get books => _books;
 
   Future<void> loadBooks() async {
@@ -22,7 +20,7 @@ class BookProvider with ChangeNotifier {
       headers: {'content-type': 'application/json'},
     );
 
-    List<dynamic> booksData = jsonDecode(response.body);
+    List<dynamic> booksData = jsonDecode(utf8.decode(response.body.codeUnits));
 
     for (var book in booksData) {
       _books.add(
@@ -53,7 +51,7 @@ class BookProvider with ChangeNotifier {
       headers: {'content-type': 'application/json'},
     );
 
-    List<dynamic> booksData = jsonDecode(response.body);
+    List<dynamic> booksData = jsonDecode(utf8.decode(response.body.codeUnits));
 
     for (var book in booksData) {
       _books.add(
@@ -91,33 +89,9 @@ class BookProvider with ChangeNotifier {
     );
   }
 
-  Future<Publisher> getPublisher(int id) async {
-    final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/editora/$id'),
-      headers: {'content-type': 'application/json'},
-    );
-
-    print(jsonDecode(response.body));
-
-    if (response.statusCode == 200) {
-      var publisherData = jsonDecode(response.body);
-      return Publisher(
-        publisherData['id'],
-        publisherData['nome'],
-        publisherData['cidade'],
-      );
-    }
-
-    return Publisher(-100, '@anonimo', '@anonimo');
-  }
 
   Future<void> saveBook(Map<String, Object> data, Publisher pub) {
-    print('OIII');
     final int bookId = int.parse(data['id'].toString());
-    final int publisherId = int.parse(data['publisher'].toString());
-
-    print(bookId);
-    print(publisherId);
 
     bool hasId = bookId != 0;
 
@@ -175,7 +149,7 @@ class BookProvider with ChangeNotifier {
 
       notifyListeners();
     } else if (response.statusCode == 400) {
-      throw HttpException(jsonDecode(response.body)['error']);
+      throw HttpException(jsonDecode(utf8.decode(response.body.codeUnits))['error']);
     } else {
       throw const HttpException(
         'Ocorreu um erro ao tentar salvar o livro.',
@@ -213,7 +187,7 @@ class BookProvider with ChangeNotifier {
 
         notifyListeners();
       } else if (response.statusCode == 400) {
-        throw HttpException(jsonDecode(response.body)['error']);
+        throw HttpException(jsonDecode(utf8.decode(response.body.codeUnits))['error']);
       } else {
         throw const HttpException(
           'Ocorreu um erro ao tentar salvar o livro.',
@@ -252,7 +226,7 @@ class BookProvider with ChangeNotifier {
         _books.remove(_books[index]);
         notifyListeners();
       } else if (response.statusCode == 400) {
-        throw HttpException(jsonDecode(response.body)['error']);
+        throw HttpException(jsonDecode(utf8.decode(response.body.codeUnits))['error']);
       } else {
         throw const HttpException(
           'Ocorreu um erro ao tentar remover o livro.',

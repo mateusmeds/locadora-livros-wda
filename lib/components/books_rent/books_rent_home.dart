@@ -55,7 +55,7 @@ class _BooksRentHomeState extends State<BooksRentHome> {
                 children: [
                   _isError
                       ? ListEmptyMessage(
-                          message: 'Nenhum aluguél encontrado.',
+                          message: 'Nenhum aluguel encontrado.',
                           icon: Icons.person,
                         )
                       : BooksRentList(
