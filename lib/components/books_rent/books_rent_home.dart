@@ -25,15 +25,16 @@ class _BooksRentHomeState extends State<BooksRentHome> {
       context,
       listen: false,
     ).loadBooksRental().then((value) {
-      setState(() {
-        _isLoading = false;
-      });
-    }).catchError((onError) {
-      setState(() {
-        _isLoading = false;
-        _isError = true;
-        print(onError);
-      });
+      if (value) {
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          _isError = true;
+        });
+      }
     });
   }
 
@@ -56,7 +57,7 @@ class _BooksRentHomeState extends State<BooksRentHome> {
                   _isError
                       ? ListEmptyMessage(
                           message: 'Nenhum aluguel encontrado.',
-                          icon: Icons.person,
+                          icon: Icons.date_range,
                         )
                       : BooksRentList(
                           booksRent: bookRentProvider.booksRental,
@@ -64,18 +65,17 @@ class _BooksRentHomeState extends State<BooksRentHome> {
                 ],
               ),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => const BookRentRegisterForm(),
-              ),
-            );
-          },
-          child: const Icon(
-            Icons.add,
-            size: 30,
-          )),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Novo Aluguel'),
+        icon: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => const BookRentRegisterForm(),
+            ),
+          );
+        },
+      ),
       drawer: const Drawer(
         child: MenuDrawer(),
       ),

@@ -167,10 +167,11 @@ class _UserEditFormState extends State<UserEditForm> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Salvar'),
+        icon: Icon(Icons.save),
         onPressed: _submitForm,
         backgroundColor: Colors.green,
-        child: const Icon(Icons.save),
       ),
     );
   }

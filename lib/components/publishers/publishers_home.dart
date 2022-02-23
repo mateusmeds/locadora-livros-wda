@@ -51,29 +51,27 @@ class _PublishersHomeState extends State<PublishersHome> {
                 child: CircularProgressIndicator(),
               )
             : Column(
-              children: [
-                _isError
-                    ? ListEmptyMessage(
-                        message: 'Nenhuma editora encontrada.',
-                        icon: Icons.library_books_rounded,
-                      )
-                    : PublishersList(publisherProvider.publishers),
-              ],
-            ),
-      ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    const PublisherRegisterForm(),
+                children: [
+                  _isError
+                      ? ListEmptyMessage(
+                          message: 'Nenhuma editora encontrada.',
+                          icon: Icons.library_books_rounded,
+                        )
+                      : PublishersList(publisherProvider.publishers),
+                ],
               ),
-            );
-          },
-          child: const Icon(
-            Icons.add,
-            size: 30,
-          )),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Nova Editora'),
+        icon: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => const PublisherRegisterForm(),
+            ),
+          );
+        },
+      ),
       drawer: const Drawer(
         child: MenuDrawer(),
       ),

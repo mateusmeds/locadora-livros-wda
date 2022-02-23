@@ -139,7 +139,9 @@ class PublisherSingle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton(
+          FloatingActionButton.extended(
+            label: Text('Editar'),
+            icon: Icon(Icons.edit),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -149,13 +151,13 @@ class PublisherSingle extends StatelessWidget {
                 ),
               );
             },
-            child: Icon(Icons.edit),
             heroTag: null,
           ),
           SizedBox(height: 20),
-          FloatingActionButton(
+          FloatingActionButton.extended(
+            label: Text('Excluir'),
+            icon: Icon(Icons.delete_forever_rounded),
             onPressed: onDelete,
-            child: Icon(Icons.delete_forever_rounded),
             heroTag: null,
             backgroundColor: Colors.red[400],
           ),

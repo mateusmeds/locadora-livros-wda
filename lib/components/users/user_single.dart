@@ -181,7 +181,9 @@ class UserSingle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton(
+          FloatingActionButton.extended(
+            label: Text('Editar'),
+            icon: Icon(Icons.edit),
             onPressed: userAtt.id == -100
                 ? null
                 : () {
@@ -193,13 +195,13 @@ class UserSingle extends StatelessWidget {
                       ),
                     );
                   },
-            child: Icon(Icons.edit),
             heroTag: null,
           ),
           SizedBox(height: 20),
-          FloatingActionButton(
+          FloatingActionButton.extended(
+            label: Text('Excluir'),
+            icon: Icon(Icons.delete_forever_rounded),
             onPressed: userAtt.id != -100 ? onDelete : null,
-            child: Icon(Icons.delete_forever_rounded),
             heroTag: null,
             backgroundColor: Colors.red[400],
           ),

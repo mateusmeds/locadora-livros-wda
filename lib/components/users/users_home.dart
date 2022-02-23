@@ -62,18 +62,17 @@ class _UsersHomeState extends State<UsersHome> {
                 ],
               ),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => const UserRegisterForm(),
-              ),
-            );
-          },
-          child: const Icon(
-            Icons.add,
-            size: 30,
-          )),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Novo Usuário'),
+        icon: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => const UserRegisterForm(),
+            ),
+          );
+        },
+      ),
       drawer: const Drawer(
         child: MenuDrawer(),
       ),

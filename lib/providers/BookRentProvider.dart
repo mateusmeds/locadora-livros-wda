@@ -234,8 +234,8 @@ class BookRentProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         bookRental.devolutionDate = DateFormat('y-MM-dd')
-                .format(DateTime.now().add(const Duration(hours: 3)))
-                .toString();
+            .format(DateTime.now().add(const Duration(hours: 3)))
+            .toString();
         _booksRental[index] = bookRental;
 
         notifyListeners();
@@ -249,46 +249,73 @@ class BookRentProvider with ChangeNotifier {
     }
   }
 
-  // Future<void> removeBook(Book book) async {
-  //   int index = _books.indexWhere((u) => u.id == book.id);
+  Future<void> removeBookRental(BookRent bookRental) async {
+    int index = _booksRental.indexWhere((u) => u.id == bookRental.id);
 
-  //   if (index >= 0) {
-  //     final response = await http.delete(
-  //       Uri.parse('http://livraria--back.herokuapp.com/api/livro'),
-  //       headers: {'content-type': 'application/json'},
-  //       body: jsonEncode(
-  //         {
-  //           "autor": book.author,
-  //           "editora": {
-  //             "cidade": book.publisher.city,
-  //             "id": book.publisher.id,
-  //             "nome": book.publisher.name
-  //           },
-  //           "id": book.id,
-  //           "lancamento": book.releaseYear,
-  //           "nome": book.name,
-  //           "quantidade": book.quantity,
-  //           "totalalugado": book.totalRented,
-  //         },
-  //       ),
-  //     );
+    if (index >= 0) {
+      DateTime rentalDateFormat;
+      DateTime previsionDateFormat;
+      String rentalDateFormatString;
+      String previsionDateFormatString;
 
-  //     //print(jsonDecode(response.body));
+      try {
+        rentalDateFormat = DateFormat('y-MM-dd').parse(bookRental.rentalDate);
+        previsionDateFormat =
+            DateFormat('y-MM-dd').parse(bookRental.previsionDate);
+      } catch (e) {
+        rentalDateFormat = DateFormat('dd/MM/y').parse(bookRental.rentalDate);
+        previsionDateFormat =
+            DateFormat('dd/MM/y').parse(bookRental.previsionDate);
+      }
 
-  //     if (response.statusCode == 200 || response.statusCode == 204) {
-  //       _books.remove(_books[index]);
-  //       notifyListeners();
-  //     } else if (response.statusCode == 400) {
-  //       throw HttpException(jsonDecode(response.body)['error']);
-  //     } else {
-  //       throw const HttpException(
-  //         'Ocorreu um erro ao tentar remover o livro.',
-  //       );
-  //     }
-  //   } else {
-  //     throw const HttpException(
-  //       'Livro não existe.',
-  //     );
-  //   }
-  // }
+      rentalDateFormatString = DateFormat('y-MM-dd').format(rentalDateFormat);
+      previsionDateFormatString =
+          DateFormat('y-MM-dd').format(previsionDateFormat);
+      final response = await http.delete(
+        Uri.parse('http://livraria--back.herokuapp.com/api/aluguel'),
+        headers: {'content-type': 'application/json'},
+        body: jsonEncode(
+          {
+            "data_aluguel": rentalDateFormatString,
+            "data_devolucao": "",
+            "data_previsao": previsionDateFormatString,
+            "id": bookRental.id,
+            "livro_id": {
+              "autor": bookRental.book.author,
+              "editora": {
+                "cidade": bookRental.book.publisher.city,
+                "id": bookRental.book.publisher.id,
+                "nome": bookRental.book.publisher.name,
+              },
+              "id": bookRental.book.id,
+              "lancamento": bookRental.book.releaseYear,
+              "nome": bookRental.book.name,
+              "quantidade": bookRental.book.quantity,
+              "totalalugado": bookRental.book.totalRented,
+            },
+            "usuario_id": {
+              "cidade": bookRental.user.city,
+              "email": bookRental.user.email,
+              "endereco": bookRental.user.address,
+              "id": bookRental.user.id,
+              "nome": bookRental.user.name
+            }
+          },
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        _booksRental.remove(_booksRental[index]);
+        notifyListeners();
+      } else {
+        throw const HttpException(
+          'Ocorreu um erro ao tentar remover o aluguel.',
+        );
+      }
+    } else {
+      throw const HttpException(
+        'Aluguel não existe.',
+      );
+    }
+  }
 }

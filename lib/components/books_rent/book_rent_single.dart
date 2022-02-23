@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:livraria_wda/models/book_rent.dart';
@@ -12,8 +14,7 @@ class BookRentSingle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bookRentalProvider =
-        Provider.of<BookRentProvider>(context, listen: false);
+    
     final msg = ScaffoldMessenger.of(context);
 
     //Convertendo datas de String para DateTime
@@ -239,48 +240,128 @@ class BookRentSingle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           bookRent.devolutionDate == 'null'
-              ? FloatingActionButton(
+              ? FloatingActionButton.extended(
+                  label: Text('Devolver'),
+                  icon: Icon(Icons.check),
                   onPressed: () {
-                    bookRentalProvider.returnBook(bookRent).then((value) {
-                      Navigator.of(context).pop();
-                      msg.showSnackBar(
-                        SnackBar(
-                          content: const Text(
-                            'Livro devolvido com sucesso',
-                            style: TextStyle(fontSize: 17),
+                    showDialog<bool>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text('Devolver Livro'),
+                        content: const Text('Tem certeza?'),
+                        actions: [
+                          TextButton(
+                            child: const Text('Não'),
+                            onPressed: () => Navigator.of(ctx).pop(false),
                           ),
-                          backgroundColor: Colors.green[400],
-                          duration: const Duration(seconds: 5),
-                        ),
-                      );
-                    }).catchError((onError) {
-                      msg.showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            onError
-                                .toString()
-                                .replaceAll('HttpException: ', 'Erro: '),
-                            style: const TextStyle(fontSize: 17),
-                          ),
-                          backgroundColor: Colors.red[400],
-                          duration: const Duration(seconds: 5),
-                        ),
-                      );
+                          TextButton(
+                              child: const Text('Sim'),
+                              onPressed: () {
+                                Navigator.of(ctx).pop(true);
+                              }),
+                        ],
+                      ),
+                    ).then((value) async {
+                      if (value ?? false) {
+                        try {
+                          await Provider.of<BookRentProvider>(
+                            context,
+                            listen: false,
+                          ).returnBook(bookRent).then((value) {
+                            Navigator.of(context).pop();
+                            msg.showSnackBar(
+                              SnackBar(
+                                content: const Text(
+                                  'Livro devolvido com sucesso.',
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                                backgroundColor: Colors.green[400],
+                                duration: const Duration(seconds: 5),
+                              ),
+                            );
+                          });
+                        } on HttpException catch (error) {
+                          msg.showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                error
+                                    .toString()
+                                    .replaceAll('HttpException: ', 'Erro: '),
+                                style: const TextStyle(fontSize: 17),
+                              ),
+                              backgroundColor: Colors.red[400],
+                              duration: const Duration(seconds: 5),
+                            ),
+                          );
+                        }
+                      }
                     });
                   },
-                  child: Icon(Icons.check),
-                  backgroundColor: Colors.green,
                   heroTag: null,
                 )
-              : SizedBox(height: 0),
+              : const SizedBox(height: 0),
           //Verificação para ver se vai precisar colocar espaçamento vertical entre os botões
           bookRent.devolutionDate == 'null'
-              ? SizedBox(height: 20)
-              : SizedBox(height: 0),
+              ? const SizedBox(height: 20)
+              : const SizedBox(height: 0),
           bookRent.devolutionDate == 'null'
-              ? FloatingActionButton(
-                  onPressed: () {},
-                  child: Icon(Icons.delete_forever_rounded),
+              ? FloatingActionButton.extended(
+                  label: Text('Cancelar'),
+                  icon: const Icon(Icons.cancel_outlined),
+                  onPressed: () {
+                    showDialog<bool>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text('Cancelar Aluguel'),
+                        content: const Text('Tem certeza?'),
+                        actions: [
+                          TextButton(
+                            child: const Text('Não'),
+                            onPressed: () => Navigator.of(ctx).pop(false),
+                          ),
+                          TextButton(
+                              child: const Text('Sim'),
+                              onPressed: () {
+                                Navigator.of(ctx).pop(true);
+                              }),
+                        ],
+                      ),
+                    ).then((value) async {
+                      if (value ?? false) {
+                        try {
+                          await Provider.of<BookRentProvider>(
+                            context,
+                            listen: false,
+                          ).removeBookRental(bookRent).then((value) {
+                            Navigator.of(context).pop();
+                            msg.showSnackBar(
+                              SnackBar(
+                                content: const Text(
+                                  'Aluguel cancelado com sucesso.',
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                                backgroundColor: Colors.green[400],
+                                duration: const Duration(seconds: 5),
+                              ),
+                            );
+                          });
+                        } on HttpException catch (error) {
+                          msg.showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                error
+                                    .toString()
+                                    .replaceAll('HttpException: ', 'Erro: '),
+                                style: const TextStyle(fontSize: 17),
+                              ),
+                              backgroundColor: Colors.red[400],
+                              duration: const Duration(seconds: 5),
+                            ),
+                          );
+                        }
+                      }
+                    });
+                  },
                   heroTag: null,
                   backgroundColor: Colors.red[400],
                 )

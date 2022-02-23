@@ -242,12 +242,10 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                 ),
               ),
             ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Salvar'),
+        icon: Icon(Icons.save),
         onPressed: _submitForm,
-        child: const Icon(
-          Icons.save,
-          size: 30,
-        ),
         backgroundColor: Colors.green,
       ),
     );

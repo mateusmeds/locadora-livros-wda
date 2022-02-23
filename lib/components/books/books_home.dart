@@ -61,18 +61,16 @@ class _BooksHomeState extends State<BooksHome> {
                 ],
               ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Novo Livro'),
+        icon: Icon(Icons.add),
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) => const BookRegisterForm(),
               ),
             );
-          },
-          child: const Icon(
-            Icons.add,
-            size: 30,
-          )),
+          },),
       drawer: const Drawer(
         child: MenuDrawer(),
       ),
