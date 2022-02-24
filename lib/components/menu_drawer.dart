@@ -31,7 +31,7 @@ class MenuDrawer extends StatelessWidget {
             ),
             textColor: Colors.white,
             title: const Text(
-              "Mateus Medeiros",
+              "Caio",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -39,7 +39,7 @@ class MenuDrawer extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: const Text(
-              "mateus@mail.com gesges ges gsehs hse",
+              "caio@wda.com.br",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,

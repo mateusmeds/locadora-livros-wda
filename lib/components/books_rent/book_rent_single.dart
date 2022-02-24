@@ -307,7 +307,7 @@ class BookRentSingle extends StatelessWidget {
           bookRent.devolutionDate == 'null'
               ? FloatingActionButton.extended(
                   label: Text('Cancelar'),
-                  icon: const Icon(Icons.cancel_outlined),
+                  icon: const Icon(Icons.clear),
                   onPressed: () {
                     showDialog<bool>(
                       context: context,

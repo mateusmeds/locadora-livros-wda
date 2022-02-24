@@ -56,12 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('WDA Livraria'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            Text('Página Home'),
-          ],
-        ),
+      body: Center(
+        
+        child: Image.asset('wda.png', height: 100)
       ),
       drawer: const Drawer(
         child: MenuDrawer(),
