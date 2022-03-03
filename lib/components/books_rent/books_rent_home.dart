@@ -46,28 +46,24 @@ class _BooksRentHomeState extends State<BooksRentHome> {
       appBar: AppBar(
         title: const Text('Lista de Aluguéis'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 90),
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                children: [
-                  _isError
-                      ? ListEmptyMessage(
-                          message: 'Nenhum aluguel encontrado.',
-                          icon: Icons.date_range,
-                        )
-                      : BooksRentList(
-                          booksRent: bookRentProvider.booksRental,
-                        ),
-                ],
-              ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('Novo Aluguel'),
-        icon: Icon(Icons.add),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                _isError
+                    ? ListEmptyMessage(
+                        message: 'Nenhum aluguel encontrado.',
+                        icon: Icons.date_range,
+                      )
+                    : BooksRentList(
+                        booksRent: bookRentProvider.booksRental,
+                      ),
+              ],
+            ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(

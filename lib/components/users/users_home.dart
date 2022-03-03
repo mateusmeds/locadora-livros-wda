@@ -45,26 +45,22 @@ class _UsersHomeState extends State<UsersHome> {
       appBar: AppBar(
         title: const Text('Lista de usuários'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 90),
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                children: [
-                  _isError
-                      ? ListEmptyMessage(
-                          message: 'Nenhum usuário encontrado.',
-                          icon: Icons.person,
-                        )
-                      : UserList(userProvider.users),
-                ],
-              ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('Novo Usuário'),
-        icon: Icon(Icons.add),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                _isError
+                    ? ListEmptyMessage(
+                        message: 'Nenhum usuário encontrado.',
+                        icon: Icons.person,
+                      )
+                    : UserList(userProvider.users),
+              ],
+            ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(

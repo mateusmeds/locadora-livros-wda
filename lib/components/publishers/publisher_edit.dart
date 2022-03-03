@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 class PublisherEditForm extends StatefulWidget {
   final Publisher publisher;
 
-  const PublisherEditForm({required this.publisher, Key? key}) : super(key: key);
+  const PublisherEditForm({required this.publisher, Key? key})
+      : super(key: key);
 
   @override
   _PublisherEditFormState createState() => _PublisherEditFormState();
@@ -75,61 +76,66 @@ class _PublisherEditFormState extends State<PublisherEditForm> {
       appBar: AppBar(
         title: const Text('Editar Editora'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30.0, left: 10.0, right: 10.0),
-          child: Form(
-            key: _form,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const Icon(
-                  Icons.person,
-                  size: 90,
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  initialValue: widget.publisher.name,
-                  decoration: const InputDecoration(
-                    labelText: 'Nome',
-                    prefixIcon: Icon(Icons.my_library_books_rounded),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 30.0, left: 10.0, right: 10.0),
+                child: Form(
+                  key: _form,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      const Icon(
+                        Icons.person,
+                        size: 90,
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        initialValue: widget.publisher.name,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome',
+                          prefixIcon: Icon(Icons.my_library_books_rounded),
+                        ),
+                        onSaved: (newValue) =>
+                            _formData['name'] = newValue.toString(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório.';
+                          } else if (value.length < 3) {
+                            return 'No mínimo 3 caracteres.';
+                          } else if (value.length > 30) {
+                            return 'No máximo 30 caracteres.';
+                          }
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: widget.publisher.city,
+                        decoration: const InputDecoration(
+                          labelText: 'Cidade',
+                          prefixIcon: Icon(Icons.location_city_rounded),
+                        ),
+                        onSaved: (newValue) =>
+                            _formData['city'] = newValue.toString(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório.';
+                          } else if (value.length < 3) {
+                            return 'No mínimo 3 caracteres.';
+                          } else if (value.length > 50) {
+                            return 'No máximo 20 caracteres.';
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                  onSaved: (newValue) =>
-                      _formData['name'] = newValue.toString(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    } else if (value.length < 3) {
-                      return 'No mínimo 3 caracteres.';
-                    } else if (value.length > 30) {
-                      return 'No máximo 30 caracteres.';
-                    }
-                  },
                 ),
-                TextFormField(
-                  initialValue: widget.publisher.city,
-                  decoration: const InputDecoration(
-                    labelText: 'Cidade',
-                    prefixIcon: Icon(Icons.location_city_rounded),
-                  ),
-                  onSaved: (newValue) =>
-                      _formData['city'] = newValue.toString(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    } else if (value.length < 3) {
-                      return 'No mínimo 3 caracteres.';
-                    } else if (value.length > 50) {
-                      return 'No máximo 20 caracteres.';
-                    }
-                  },
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
       floatingActionButton: FloatingActionButton.extended(
         label: Text('Salvar'),
         icon: Icon(Icons.save),

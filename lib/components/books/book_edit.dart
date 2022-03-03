@@ -45,22 +45,29 @@ class _BookEditFormState extends State<BookEditForm> {
 
   var _selectedPublisher;
 
+  bool publisherIsSelected = true;
+
   @override
   Widget build(BuildContext context) {
     final msg = ScaffoldMessenger.of(context);
     final publisherProvider = Provider.of<PublisherProvider>(context);
 
     Future<void> _submitForm() async {
+      print('obj');
+      print(_selectedPublisher);
+
+      if (_selectedPublisher == null) {
+        publisherIsSelected = false;
+      }
+
       final isValid = _form.currentState?.validate() ?? false;
 
-      if (!isValid) {
+      if (!isValid || _selectedPublisher == null) {
         return;
       }
 
       _formData['publisher'] = _selectedPublisher;
-      print('object $_selectedPublisher');
       if (_selectedPublisher.toString().isEmpty) {
-        print('Não selecionou');
         return;
       }
 
@@ -80,6 +87,7 @@ class _BookEditFormState extends State<BookEditForm> {
             duration: Duration(seconds: 5),
           ),
         );
+        return;
       }
 
       _form.currentState?.save();
@@ -189,7 +197,19 @@ class _BookEditFormState extends State<BookEditForm> {
                             .map((Publisher publisherItem) {
                           return DropdownMenuItem<String>(
                             value: publisherItem.id.toString(),
-                            child: Text(publisherItem.name),
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 12),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.my_library_books_rounded,
+                                    color: Colors.black54,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(publisherItem.name),
+                                ],
+                              ),
+                            ),
                           );
                         }).toList(),
                         onChanged: (String? newValue) {
@@ -200,8 +220,20 @@ class _BookEditFormState extends State<BookEditForm> {
                           });
                         },
                         value: _selectedPublisher,
-                        
                       ),
+                      !publisherIsSelected
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Selecione uma editora.',
+                                  style: TextStyle(
+                                    color: Colors.red[700],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
                       TextFormField(
                         initialValue: widget.book.author,
                         decoration: const InputDecoration(
@@ -226,6 +258,7 @@ class _BookEditFormState extends State<BookEditForm> {
                           labelText: 'Ano de lançamento',
                           prefixIcon: Icon(Icons.date_range),
                         ),
+                        keyboardType: TextInputType.numberWithOptions(),
                         onSaved: (newValue) =>
                             _formData['releaseYear'] = newValue.toString(),
                         validator: (value) {
@@ -233,6 +266,8 @@ class _BookEditFormState extends State<BookEditForm> {
                             return 'Campo obrigatório.';
                           } else if (value.length < 4) {
                             return 'Precisa ser 4 Dígitos.';
+                          } else if (int.parse(value) > DateTime.now().year) {
+                            return 'O ano limite é ${DateTime.now().year}.';
                           }
                         },
                       ),
@@ -242,6 +277,7 @@ class _BookEditFormState extends State<BookEditForm> {
                           labelText: 'Quantidade',
                           prefixIcon: Icon(Icons.add),
                         ),
+                        keyboardType: const TextInputType.numberWithOptions(),
                         onSaved: (newValue) =>
                             _formData['quantity'] = newValue.toString(),
                         validator: (value) {

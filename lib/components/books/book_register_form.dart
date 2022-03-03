@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/models/publisher.dart';
 import 'package:livraria_wda/providers/BookProvider.dart';
@@ -37,42 +35,48 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
   final Map<String, Object> _formData = {};
 
   bool _isLoading = false;
-  // Opti
+
+  bool publisherIsSelected = true;
 
   var _selectedPublisher;
 
   @override
   Widget build(BuildContext context) {
-
     final msg = ScaffoldMessenger.of(context);
     final publisherProvider = Provider.of<PublisherProvider>(context);
 
     Future<void> _submitForm() async {
+      print('obj');
+      print(_selectedPublisher.toString());
+
+      if (_selectedPublisher == null) {
+        publisherIsSelected = false;
+      }
+
       final isValid = _form.currentState?.validate() ?? false;
 
-      if (!isValid) {
+      if (!isValid || _selectedPublisher == null) {
         return;
       }
 
       _formData['publisher'] = _selectedPublisher;
 
-      Publisher publisher = await Provider.of<PublisherProvider>(
+      Publisher publisher = Provider.of<PublisherProvider>(
         context,
         listen: false,
       ).publisherById(int.parse(_selectedPublisher));
 
-
       if (publisher.id < 0) {
         msg.showSnackBar(
-            SnackBar(
-              content: Text(
-                'Editora não selecionada.',
-                style: TextStyle(fontSize: 17),
-              ),
-              backgroundColor: Colors.red[400],
-              duration: Duration(seconds: 5),
+          SnackBar(
+            content: const Text(
+              'Editora não selecionada.',
+              style: TextStyle(fontSize: 17),
             ),
-          );
+            backgroundColor: Colors.red[400],
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
 
       _form.currentState?.save();
@@ -88,12 +92,12 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
         ).saveBook(_formData, publisher).then((value) {
           msg.showSnackBar(
             SnackBar(
-              content: Text(
+              content: const Text(
                 'Livro cadastrado com sucesso.',
                 style: TextStyle(fontSize: 17),
               ),
               backgroundColor: Colors.green[400],
-              duration: Duration(seconds: 5),
+              duration: const Duration(seconds: 5),
             ),
           );
         });
@@ -104,10 +108,10 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
           SnackBar(
             content: Text(
               error.toString().replaceAll('HttpException: ', 'Erro: '),
-              style: TextStyle(fontSize: 17),
+              style: const TextStyle(fontSize: 17),
             ),
             backgroundColor: Colors.red[400],
-            duration: Duration(seconds: 5),
+            duration: const Duration(seconds: 5),
           ),
         );
       } finally {
@@ -117,13 +121,13 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
 
     void _dropDownItemSelected(String novoItem) {
       setState(() {
-        this._selectedPublisher = novoItem;
+        _selectedPublisher = novoItem;
       });
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastrar Livro'),
+        title: const Text('Cadastrar Livro'),
       ),
       body: _isLoading
           ? const Center(
@@ -163,14 +167,14 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                       ),
                       DropdownButton<String>(
                         hint: Container(
-                          margin: EdgeInsets.only(left: 10),
+                          margin: const EdgeInsets.only(left: 12),
                           child: Row(
                             children: const [
                               Icon(
                                 Icons.my_library_books_rounded,
                                 color: Colors.black54,
                               ),
-                              SizedBox(width: 10),
+                              SizedBox(width: 12),
                               Text('Selecione a Editora...'),
                             ],
                           ),
@@ -180,7 +184,19 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                             .map((Publisher publisherItem) {
                           return DropdownMenuItem<String>(
                             value: publisherItem.id.toString(),
-                            child: Text(publisherItem.name),
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 12),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.my_library_books_rounded,
+                                    color: Colors.black54,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(publisherItem.name),
+                                ],
+                              ),
+                            ),
                           );
                         }).toList(),
                         onChanged: (String? newValue) {
@@ -192,6 +208,19 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                         },
                         value: _selectedPublisher,
                       ),
+                      !publisherIsSelected
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Selecione uma editora.',
+                                  style: TextStyle(
+                                    color: Colors.red[700],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Autor',
@@ -214,6 +243,7 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                           labelText: 'Ano de lançamento',
                           prefixIcon: Icon(Icons.date_range),
                         ),
+                        keyboardType: TextInputType.numberWithOptions(),
                         onSaved: (newValue) =>
                             _formData['releaseYear'] = newValue.toString(),
                         validator: (value) {
@@ -221,7 +251,9 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                             return 'Campo obrigatório.';
                           } else if (value.length < 4) {
                             return 'Precisa ser 4 Dígitos.';
-                          } 
+                          } else if (int.parse(value) > DateTime.now().year) {
+                            return 'O ano limite é ${DateTime.now().year}.';
+                          }
                         },
                       ),
                       TextFormField(
@@ -229,6 +261,7 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                           labelText: 'Quantidade',
                           prefixIcon: Icon(Icons.add),
                         ),
+                        keyboardType: TextInputType.numberWithOptions(),
                         onSaved: (newValue) =>
                             _formData['quantity'] = newValue.toString(),
                         validator: (value) {
@@ -243,8 +276,8 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
               ),
             ),
       floatingActionButton: FloatingActionButton.extended(
-        label: Text('Salvar'),
-        icon: Icon(Icons.save),
+        label: const Text('Salvar'),
+        icon: const Icon(Icons.save),
         onPressed: _submitForm,
         backgroundColor: Colors.green,
       ),

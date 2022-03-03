@@ -8,7 +8,6 @@ class PublishersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Expanded(
       child: ListView.builder(
         itemCount: publishers.length,
@@ -16,8 +15,7 @@ class PublishersList extends StatelessWidget {
           final publisher = publishers[index];
 
           return Container(
-            margin:
-                const EdgeInsets.only(top: 10, bottom: 5, left: 10, right: 10),
+            margin: const EdgeInsets.all(5),
             child: Card(
               color: Colors.grey[300],
               elevation: 5,
@@ -40,7 +38,8 @@ class PublishersList extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => PublisherSingle(publisher: publisher),
+                      builder: (BuildContext context) =>
+                          PublisherSingle(publisher: publisher),
                     ),
                   );
                 },

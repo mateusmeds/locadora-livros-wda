@@ -7,15 +7,22 @@ import 'package:livraria_wda/models/user.dart';
 import 'package:livraria_wda/providers/UserProvider.dart';
 import 'package:provider/provider.dart';
 
-class UserSingle extends StatelessWidget {
+class UserSingle extends StatefulWidget {
   final User user;
 
   const UserSingle({required this.user, Key? key}) : super(key: key);
 
   @override
+  State<UserSingle> createState() => _UserSingleState();
+}
+
+class _UserSingleState extends State<UserSingle> {
+  bool _isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final userAtt = userProvider.userById(user.id);
+    final userAtt = userProvider.userById(widget.user.id);
     final msg = ScaffoldMessenger.of(context);
 
     void onDelete() {
@@ -33,6 +40,7 @@ class UserSingle extends StatelessWidget {
                 child: const Text('Sim'),
                 onPressed: () {
                   Navigator.of(ctx).pop(true);
+                  setState(() => _isLoading = true);
                 }),
           ],
         ),
@@ -66,6 +74,8 @@ class UserSingle extends StatelessWidget {
                 duration: Duration(seconds: 5),
               ),
             );
+          } finally {
+            setState(() => _isLoading = false);
           }
         }
       });
@@ -75,115 +85,118 @@ class UserSingle extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Usuário'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const CircleAvatar(
-                radius: 40,
-                child: Icon(
-                  Icons.person,
-                  size: 60,
-                ),
-              ),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Text(
-                      userAtt.name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const CircleAvatar(
+                      radius: 40,
+                      child: Icon(
+                        Icons.person,
+                        size: 60,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey[300],
-                    ),
-                    child: Row(
+                    const SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.email_rounded,
-                          color: Colors.black54,
-                        ),
-                        const SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            userAtt.email,
+                            userAtt.name,
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey[300],
-                    ),
-                    child: Row(
+                    const SizedBox(height: 30),
+                    Column(
                       children: [
-                        const Icon(
-                          Icons.location_on,
-                          color: Colors.black54,
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.grey[300],
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.email_rounded,
+                                color: Colors.black54,
+                              ),
+                              const SizedBox(width: 5),
+                              Flexible(
+                                child: Text(
+                                  userAtt.email,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(width: 5),
-                        Flexible(
-                          child: Text(userAtt.address),
+                        SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.grey[300],
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                color: Colors.black54,
+                              ),
+                              const SizedBox(width: 5),
+                              Flexible(
+                                child: Text(userAtt.address),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.grey[300],
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.location_city_rounded,
+                                color: Colors.black54,
+                              ),
+                              const SizedBox(width: 5),
+                              Flexible(
+                                child: Text(userAtt.city),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey[300],
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.location_city_rounded,
-                          color: Colors.black54,
-                        ),
-                        const SizedBox(width: 5),
-                        Flexible(
-                          child: Text(userAtt.city),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton.extended(
-            label: Text('Editar'),
-            icon: Icon(Icons.edit),
+          FloatingActionButton(
+            child: Icon(Icons.edit),
             onPressed: userAtt.id == -100
                 ? null
                 : () {
@@ -197,10 +210,9 @@ class UserSingle extends StatelessWidget {
                   },
             heroTag: null,
           ),
-          SizedBox(height: 20),
-          FloatingActionButton.extended(
-            label: Text('Excluir'),
-            icon: Icon(Icons.delete_forever_rounded),
+          SizedBox(height: 15),
+          FloatingActionButton(
+            child: Icon(Icons.delete_forever_rounded),
             onPressed: userAtt.id != -100 ? onDelete : null,
             heroTag: null,
             backgroundColor: Colors.red[400],

@@ -147,6 +147,7 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
                           labelText: 'E-mail',
                           prefixIcon: Icon(Icons.mail),
                         ),
+                        keyboardType: TextInputType.emailAddress,
                         onSaved: (newValue) =>
                             _formData['email'] = newValue.toString(),
                         validator: (value) {

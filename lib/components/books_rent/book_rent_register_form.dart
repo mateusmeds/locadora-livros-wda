@@ -17,6 +17,9 @@ class BookRentRegisterForm extends StatefulWidget {
 class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
   final rentalDateController = TextEditingController();
   final previsionDateController = TextEditingController();
+  bool bookIsSelected = true;
+  bool userIsSelected = true;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -55,8 +58,6 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
   ///agrupa os dados do formulário após a validação
   final Map<String, Object> _formData = {};
 
-  bool _isLoading = false;
-
   var _selectedBook;
   var _selectedUser;
 
@@ -67,17 +68,17 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
     final bookProvider = Provider.of<BookProvider>(context);
 
     Future<void> _submitForm() async {
-      final isValid = _form.currentState?.validate() ?? false;
-
-      if (!isValid) {
-        return;
-      }
-
       if (_selectedBook == null) {
-        return;
+        bookIsSelected = false;
       }
 
       if (_selectedUser == null) {
+        userIsSelected = false;
+      }
+
+      final isValid = _form.currentState?.validate() ?? false;
+
+      if (!isValid || _selectedBook == null || _selectedUser == null) {
         return;
       }
 
@@ -94,12 +95,12 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
       if (user.id < 0) {
         msg.showSnackBar(
           SnackBar(
-            content: Text(
+            content: const Text(
               'Usuário não selecionado.',
               style: TextStyle(fontSize: 17),
             ),
             backgroundColor: Colors.red[400],
-            duration: Duration(seconds: 5),
+            duration: const Duration(seconds: 5),
           ),
         );
 
@@ -109,12 +110,12 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
       if (book.id < 0) {
         msg.showSnackBar(
           SnackBar(
-            content: Text(
+            content: const Text(
               'Livro não selecionado.',
               style: TextStyle(fontSize: 17),
             ),
             backgroundColor: Colors.red[400],
-            duration: Duration(seconds: 5),
+            duration: const Duration(seconds: 5),
           ),
         );
 
@@ -134,12 +135,12 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
         ).saveBookRental(_formData, book, user).then((value) {
           msg.showSnackBar(
             SnackBar(
-              content: Text(
+              content: const Text(
                 'Aluguel cadastrado com sucesso.',
                 style: TextStyle(fontSize: 17),
               ),
               backgroundColor: Colors.green[400],
-              duration: Duration(seconds: 5),
+              duration: const Duration(seconds: 5),
             ),
           );
         });
@@ -150,10 +151,10 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
           SnackBar(
             content: Text(
               error.toString().replaceAll('HttpException: ', 'Erro: '),
-              style: TextStyle(fontSize: 17),
+              style: const TextStyle(fontSize: 17),
             ),
             backgroundColor: Colors.red[400],
-            duration: Duration(seconds: 5),
+            duration: const Duration(seconds: 5),
           ),
         );
       } finally {
@@ -163,13 +164,13 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
 
     void _dropDownBookItemSelected(String newId) {
       setState(() {
-        this._selectedBook = newId;
+        _selectedBook = newId;
       });
     }
 
     void _dropDownUserItemSelected(String newId) {
       setState(() {
-        this._selectedUser = newId;
+        _selectedUser = newId;
       });
     }
 
@@ -177,154 +178,215 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
       appBar: AppBar(
         title: const Text('Cadastrar Aluguel'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
-          child: Form(
-            key: _form,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const Icon(
-                  Icons.date_range,
-                  size: 90,
-                ),
-                const SizedBox(height: 20),
-                //Lista de livros
-                DropdownButton<String>(
-                  hint: Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.menu_book_sharp,
-                          color: Colors.black54,
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
+                child: Form(
+                  key: _form,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      const Icon(
+                        Icons.date_range,
+                        size: 90,
+                      ),
+                      const SizedBox(height: 20),
+                      //Lista de livros
+                      DropdownButton<String>(
+                        hint: Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            children: const [
+                              Icon(
+                                Icons.menu_book_sharp,
+                                color: Colors.black54,
+                              ),
+                              SizedBox(width: 10),
+                              Text('Selecione o livro...'),
+                            ],
+                          ),
                         ),
-                        SizedBox(width: 10),
-                        Text('Selecione o livro...'),
-                      ],
-                    ),
-                  ),
-                  isExpanded: true,
-                  items: bookProvider.books.map((Book bookItem) {
-                    return DropdownMenuItem<String>(
-                      value: bookItem.id.toString(),
-                      child: Text(bookItem.name),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    _dropDownBookItemSelected(newValue!);
-                    setState(() {
-                      _selectedBook = newValue;
-                      print(_selectedBook);
-                    });
-                  },
-                  value: _selectedBook,
-                ),
-                const SizedBox(height: 10),
-                //Lista de usuários
-                DropdownButton<String>(
-                  hint: Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.person,
-                          color: Colors.black54,
+                        isExpanded: true,
+                        items: bookProvider.books.map((Book bookItem) {
+                          return DropdownMenuItem<String>(
+                            value: bookItem.id.toString(),
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 12),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.menu_book_sharp,
+                                    color: Colors.black54,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(bookItem.name),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          _dropDownBookItemSelected(newValue!);
+                          setState(() {
+                            _selectedBook = newValue;
+                            print(_selectedBook);
+                          });
+                        },
+                        value: _selectedBook,
+                      ),
+                      !bookIsSelected
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Selecione um livro.',
+                                  style: TextStyle(
+                                    color: Colors.red[700],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
+                      const SizedBox(height: 10),
+                      //Lista de usuários
+                      DropdownButton<String>(
+                        hint: Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            children: const [
+                              Icon(
+                                Icons.person,
+                                color: Colors.black54,
+                              ),
+                              SizedBox(width: 10),
+                              Text('Selecione o usuário...'),
+                            ],
+                          ),
                         ),
-                        SizedBox(width: 10),
-                        Text('Selecione o usuário...'),
-                      ],
-                    ),
-                  ),
-                  isExpanded: true,
-                  items: userProvider.users.map((User userItem) {
-                    return DropdownMenuItem<String>(
-                      value: userItem.id.toString(),
-                      child: Text(userItem.name),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    _dropDownUserItemSelected(newValue!);
-                    setState(() {
-                      _selectedUser = newValue;
-                      print(_selectedUser);
-                    });
-                  },
-                  value: _selectedUser,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Data de aluguel',
-                    prefixIcon: Icon(Icons.date_range),
-                  ),
-                  readOnly: true,
-                  controller: rentalDateController,
-                  onTap: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now().add(Duration(hours: 3)),
-                      firstDate: DateTime.now().add(Duration(hours: 3)),
-                      lastDate: DateTime.now().add(Duration(hours: 3)),
-                    ).then((pickedDate) {
-                      if (pickedDate == null) {
-                        return;
-                      }
+                        isExpanded: true,
+                        items: userProvider.users.map((User userItem) {
+                          return DropdownMenuItem<String>(
+                            value: userItem.id.toString(),
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 12),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.person,
+                                    color: Colors.black54,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(userItem.name),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          _dropDownUserItemSelected(newValue!);
+                          setState(() {
+                            _selectedUser = newValue;
+                            print(_selectedUser);
+                          });
+                        },
+                        value: _selectedUser,
+                      ),
+                      !bookIsSelected
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Selecione um usuário.',
+                                  style: TextStyle(
+                                    color: Colors.red[700],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Data de aluguel',
+                          prefixIcon: Icon(Icons.date_range),
+                        ),
+                        readOnly: true,
+                        controller: rentalDateController,
+                        onTap: () {
+                          showDatePicker(
+                            context: context,
+                            initialDate:
+                                DateTime.now().add(const Duration(hours: 3)),
+                            firstDate:
+                                DateTime.now().add(const Duration(hours: 3)),
+                            lastDate:
+                                DateTime.now().add(const Duration(hours: 3)),
+                          ).then((pickedDate) {
+                            if (pickedDate == null) {
+                              return;
+                            }
 
-                      setState(() {
-                        rentalDateController.text =
-                            DateFormat('dd/MM/y').format(pickedDate);
-                        _formData['rentalDate'] = rentalDateController.text;
-                      });
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    }
-                  },
-                ),
-                TextFormField(
-                  controller: previsionDateController,
-                  decoration: const InputDecoration(
-                    labelText: 'Data de previsão',
-                    prefixIcon: Icon(Icons.date_range),
-                  ),
-                  readOnly: true,
-                  onTap: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now().add(Duration(hours: 3)),
-                      firstDate: DateTime.now().add(Duration(hours: 3)),
-                      lastDate: DateTime.now().add(Duration(days: 30)),
-                    ).then((pickedDate) {
-                      if (pickedDate == null) {
-                        return;
-                      }
+                            setState(() {
+                              rentalDateController.text =
+                                  DateFormat('dd/MM/y').format(pickedDate);
+                              _formData['rentalDate'] =
+                                  rentalDateController.text;
+                            });
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório.';
+                          }
+                        },
+                      ),
+                      TextFormField(
+                        controller: previsionDateController,
+                        decoration: const InputDecoration(
+                          labelText: 'Data de previsão',
+                          prefixIcon: Icon(Icons.date_range),
+                        ),
+                        readOnly: true,
+                        onTap: () {
+                          showDatePicker(
+                            context: context,
+                            initialDate:
+                                DateTime.now().add(const Duration(hours: 3)),
+                            firstDate:
+                                DateTime.now().add(const Duration(hours: 3)),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 30)),
+                          ).then((pickedDate) {
+                            if (pickedDate == null) {
+                              return;
+                            }
 
-                      setState(() {
-                        previsionDateController.text =
-                            DateFormat('dd/MM/y').format(pickedDate);
-                        _formData['previsionDate'] =
-                            previsionDateController.text;
-                      });
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    }
-                  },
+                            setState(() {
+                              previsionDateController.text =
+                                  DateFormat('dd/MM/y').format(pickedDate);
+                              _formData['previsionDate'] =
+                                  previsionDateController.text;
+                            });
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório.';
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
       floatingActionButton: FloatingActionButton.extended(
-        label: Text('Salvar'),
-        icon: Icon(Icons.save),
+        label: const Text('Salvar'),
+        icon: const Icon(Icons.save),
         onPressed: _submitForm,
         backgroundColor: Colors.green,
       ),

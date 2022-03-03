@@ -44,26 +44,22 @@ class _PublishersHomeState extends State<PublishersHome> {
       appBar: AppBar(
         title: const Text('Lista de Editoras'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 90),
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                children: [
-                  _isError
-                      ? ListEmptyMessage(
-                          message: 'Nenhuma editora encontrada.',
-                          icon: Icons.library_books_rounded,
-                        )
-                      : PublishersList(publisherProvider.publishers),
-                ],
-              ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('Nova Editora'),
-        icon: Icon(Icons.add),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                _isError
+                    ? ListEmptyMessage(
+                        message: 'Nenhuma editora encontrada.',
+                        icon: Icons.library_books_rounded,
+                      )
+                    : PublishersList(publisherProvider.publishers),
+              ],
+            ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(

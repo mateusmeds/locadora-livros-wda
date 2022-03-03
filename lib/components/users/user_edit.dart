@@ -76,97 +76,103 @@ class _UserEditFormState extends State<UserEditForm> {
       appBar: AppBar(
         title: const Text('Editar Usuário'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30.0, left: 10.0, right: 10.0),
-          child: Form(
-            key: _form,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const Icon(
-                  Icons.person,
-                  size: 90,
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  initialValue: widget.user.name,
-                  decoration: const InputDecoration(
-                    labelText: 'Nome',
-                    prefixIcon: Icon(Icons.person),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 30.0, left: 10.0, right: 10.0),
+                child: Form(
+                  key: _form,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      const Icon(
+                        Icons.person,
+                        size: 90,
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        initialValue: widget.user.name,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome',
+                          prefixIcon: Icon(Icons.person),
+                        ),
+                        onSaved: (newValue) =>
+                            _formData['name'] = newValue.toString(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório.';
+                          } else if (value.length < 3) {
+                            return 'No mínimo 3 caracteres.';
+                          } else if (value.length > 30) {
+                            return 'No máximo 30 caracteres.';
+                          }
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: widget.user.address,
+                        decoration: const InputDecoration(
+                          labelText: 'Endereço',
+                          prefixIcon: Icon(Icons.location_on),
+                        ),
+                        onSaved: (newValue) =>
+                            _formData['address'] = newValue.toString(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório.';
+                          } else if (value.length < 5) {
+                            return 'No mínimo 5 caracteres.';
+                          } else if (value.length > 50) {
+                            return 'No máximo 50 caracteres.';
+                          }
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: widget.user.city,
+                        decoration: const InputDecoration(
+                          labelText: 'Cidade',
+                          prefixIcon: Icon(Icons.location_city_rounded),
+                        ),
+                        onSaved: (newValue) =>
+                            _formData['city'] = newValue.toString(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório.';
+                          } else if (value.length < 3) {
+                            return 'No mínimo 3 caracteres.';
+                          } else if (value.length > 50) {
+                            return 'No máximo 20 caracteres.';
+                          }
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: widget.user.email,
+                        decoration: const InputDecoration(
+                          labelText: 'E-mail',
+                          prefixIcon: Icon(Icons.mail),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        onSaved: (newValue) =>
+                            _formData['email'] = newValue.toString(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório.';
+                          } else if (!EmailValidator.validate(value)) {
+                            return 'E-mail inválido.';
+                          } else if (value.length > 50) {
+                            return 'No máximo 100 caracteres.';
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                  onSaved: (newValue) =>
-                      _formData['name'] = newValue.toString(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    } else if (value.length < 3) {
-                      return 'No mínimo 3 caracteres.';
-                    } else if (value.length > 30) {
-                      return 'No máximo 30 caracteres.';
-                    }
-                  },
                 ),
-                TextFormField(
-                  initialValue: widget.user.address,
-                  decoration: const InputDecoration(
-                    labelText: 'Endereço',
-                    prefixIcon: Icon(Icons.location_on),
-                  ),
-                  onSaved: (newValue) =>
-                      _formData['address'] = newValue.toString(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    } else if (value.length < 5) {
-                      return 'No mínimo 5 caracteres.';
-                    } else if (value.length > 50) {
-                      return 'No máximo 50 caracteres.';
-                    }
-                  },
-                ),
-                TextFormField(
-                  initialValue: widget.user.city,
-                  decoration: const InputDecoration(
-                    labelText: 'Cidade',
-                    prefixIcon: Icon(Icons.location_city_rounded),
-                  ),
-                  onSaved: (newValue) =>
-                      _formData['city'] = newValue.toString(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    } else if (value.length < 3) {
-                      return 'No mínimo 3 caracteres.';
-                    } else if (value.length > 50) {
-                      return 'No máximo 20 caracteres.';
-                    }
-                  },
-                ),
-                TextFormField(
-                  initialValue: widget.user.email,
-                  decoration: const InputDecoration(
-                    labelText: 'E-mail',
-                    prefixIcon: Icon(Icons.mail),
-                  ),
-                  onSaved: (newValue) =>
-                      _formData['email'] = newValue.toString(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório.';
-                    } else if (!EmailValidator.validate(value)) {
-                      return 'E-mail inválido.';
-                    } else if (value.length > 50) {
-                      return 'No máximo 100 caracteres.';
-                    }
-                  },
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
       floatingActionButton: FloatingActionButton.extended(
         label: Text('Salvar'),
         icon: Icon(Icons.save),

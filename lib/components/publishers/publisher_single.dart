@@ -8,15 +8,22 @@ import 'package:livraria_wda/models/user.dart';
 import 'package:livraria_wda/providers/PublisherProvider.dart';
 import 'package:provider/provider.dart';
 
-class PublisherSingle extends StatelessWidget {
+class PublisherSingle extends StatefulWidget {
   final Publisher publisher;
 
   const PublisherSingle({required this.publisher, Key? key}) : super(key: key);
 
   @override
+  State<PublisherSingle> createState() => _PublisherSingleState();
+}
+
+class _PublisherSingleState extends State<PublisherSingle> {
+  bool _isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
     final publisherProvider = Provider.of<PublisherProvider>(context);
-    final publisherAtt = publisherProvider.publisherById(publisher.id);
+    final publisherAtt = publisherProvider.publisherById(widget.publisher.id);
     final msg = ScaffoldMessenger.of(context);
 
     void onDelete() {
@@ -34,6 +41,7 @@ class PublisherSingle extends StatelessWidget {
                 child: const Text('Sim'),
                 onPressed: () {
                   Navigator.of(ctx).pop(true);
+                  setState(() => _isLoading = true);
                 }),
           ],
         ),
@@ -67,6 +75,8 @@ class PublisherSingle extends StatelessWidget {
                 duration: Duration(seconds: 5),
               ),
             );
+          } finally {
+            setState(() => _isLoading = false);
           }
         }
       });
@@ -76,72 +86,75 @@ class PublisherSingle extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Editora'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const CircleAvatar(
-                radius: 40,
-                child: Icon(
-                  Icons.my_library_books_rounded,
-                  size: 55,
-                ),
-              ),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Text(
-                      publisherAtt.name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const CircleAvatar(
+                      radius: 40,
+                      child: Icon(
+                        Icons.my_library_books_rounded,
+                        size: 55,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey[300],
-                    ),
-                    child: Row(
+                    const SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.location_city_rounded,
-                          color: Colors.black54,
-                        ),
-                        const SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            publisherAtt.city,
+                            publisherAtt.name,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 30),
+                    Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.grey[300],
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.location_city_rounded,
+                                color: Colors.black54,
+                              ),
+                              const SizedBox(width: 5),
+                              Flexible(
+                                child: Text(
+                                  publisherAtt.city,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton.extended(
-            label: Text('Editar'),
-            icon: Icon(Icons.edit),
+          FloatingActionButton(
+            child: Icon(Icons.edit),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -153,10 +166,9 @@ class PublisherSingle extends StatelessWidget {
             },
             heroTag: null,
           ),
-          SizedBox(height: 20),
-          FloatingActionButton.extended(
-            label: Text('Excluir'),
-            icon: Icon(Icons.delete_forever_rounded),
+          SizedBox(height: 15),
+          FloatingActionButton(
+            child: Icon(Icons.delete_forever_rounded),
             onPressed: onDelete,
             heroTag: null,
             backgroundColor: Colors.red[400],

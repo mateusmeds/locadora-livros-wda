@@ -44,33 +44,30 @@ class _BooksHomeState extends State<BooksHome> {
       appBar: AppBar(
         title: const Text('Lista de Livros'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 90),
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                children: [
-                  _isError
-                      ? ListEmptyMessage(
-                          message: 'Nenhum livro encontrado.',
-                          icon: Icons.menu_book_sharp,
-                        )
-                      : BooksList(books: bookProvider.books),
-                ],
-              ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                _isError
+                    ? ListEmptyMessage(
+                        message: 'Nenhum livro encontrado.',
+                        icon: Icons.menu_book_sharp,
+                      )
+                    : BooksList(books: bookProvider.books),
+              ],
+            ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => const BookRegisterForm(),
+            ),
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('Novo Livro'),
-        icon: Icon(Icons.add),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => const BookRegisterForm(),
-              ),
-            );
-          },),
       drawer: const Drawer(
         child: MenuDrawer(),
       ),
