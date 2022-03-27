@@ -8,7 +8,11 @@ import 'package:http/http.dart' as http;
 class UserProvider with ChangeNotifier {
   List<User> _users = [];
 
+  List<User> _usersSearch = [];
+
   List<User> get users => _users;
+
+  List<User> get usersSearch => _usersSearch;
 
   int get usersCount {
     return _users.length;
@@ -41,6 +45,19 @@ class UserProvider with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void filterUsers({String text = ""}) {
+    print(text);
+    if (text.isNotEmpty) {
+      _usersSearch = _users
+          .where((user) =>
+              user.name.toLowerCase().contains(text.toLowerCase()) ||
+              user.address.toLowerCase().contains(text.toLowerCase()) ||
+              user.city.toLowerCase().contains(text.toLowerCase()) ||
+              user.email.toString().contains(text.toLowerCase()))
+          .toList();
+    }
   }
 
   Future<void> saveUser(Map<String, String> data) {

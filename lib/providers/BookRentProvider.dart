@@ -11,7 +11,9 @@ import 'package:livraria_wda/models/user.dart';
 
 class BookRentProvider with ChangeNotifier {
   List<BookRent> _booksRental = [];
+  List<BookRent> _booksRentSearch = [];
 
+  List<BookRent> get booksRentSearch => _booksRentSearch;
   List<BookRent> get booksRental => _booksRental;
 
   Future<bool> loadBooksRental() async {
@@ -60,6 +62,28 @@ class BookRentProvider with ChangeNotifier {
       return true;
     }
     return false;
+  }
+
+  void filterBooksRent({String text = ""}) {
+    if (text.isNotEmpty) {
+      _booksRentSearch = _booksRental
+          .where((bookRental) =>
+              bookRental.book.name.toLowerCase().contains(text.toLowerCase()) ||
+              bookRental.book.publisher.name
+                  .toLowerCase()
+                  .contains(text.toLowerCase()) ||
+              bookRental.devolutionDate
+                  .toLowerCase()
+                  .contains(text.toLowerCase()) ||
+              bookRental.previsionDate
+                  .toString()
+                  .contains(text.toLowerCase()) ||
+              bookRental.user.name.toString().contains(text.toLowerCase()) ||
+              bookRental.user.city.toString().contains(text.toLowerCase()) ||
+              bookRental.user.address.toString().contains(text.toLowerCase()) ||
+              bookRental.user.email.toString().contains(text.toLowerCase()))
+          .toList();
+    }
   }
 
   BookRent bookRentalById(int id) {

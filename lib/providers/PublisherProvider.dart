@@ -7,8 +7,11 @@ import 'package:http/http.dart' as http;
 
 class PublisherProvider with ChangeNotifier {
   List<Publisher> _publishers = [];
+  List<Publisher> _publishersSearch = [];
 
   List<Publisher> get publishers => _publishers;
+
+  List<Publisher> get publishersSearch => _publishersSearch;
 
   Future<void> loadPublishers() async {
     _publishers.clear();
@@ -22,7 +25,8 @@ class PublisherProvider with ChangeNotifier {
       return;
     }
 
-    List<dynamic> publishersData = jsonDecode(utf8.decode(response.body.codeUnits));
+    List<dynamic> publishersData =
+        jsonDecode(utf8.decode(response.body.codeUnits));
 
     for (var publisher in publishersData) {
       _publishers.add(
@@ -35,6 +39,17 @@ class PublisherProvider with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void filterPublishers({String text = ""}) {
+    print(text);
+    if (text.isNotEmpty) {
+      _publishersSearch = _publishers
+          .where((publisher) =>
+              publisher.city.toLowerCase().contains(text.toLowerCase()) ||
+              publisher.name.toLowerCase().contains(text.toLowerCase()))
+          .toList();
+    }
   }
 
   Publisher publisherById(int id) {

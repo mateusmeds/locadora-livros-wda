@@ -194,30 +194,6 @@ class _BookSingleState extends State<BookSingle> {
                           child: Row(
                             children: [
                               const Icon(
-                                Icons.menu_book_outlined,
-                                color: Colors.black54,
-                              ),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  'Quantidade: ' +
-                                      (bookAtt.quantity + bookAtt.totalRented)
-                                          .toString(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey[300],
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
                                 Icons.event_available,
                                 color: Colors.black54,
                               ),
@@ -231,28 +207,6 @@ class _BookSingleState extends State<BookSingle> {
                                       colorContainer: Colors.red,
                                       textFontSize: 17,
                                     ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey[300],
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.event_busy,
-                                color: Colors.black54,
-                              ),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  'Alugados: ${bookAtt.totalRented}',
-                                ),
-                              ),
                             ],
                           ),
                         ),

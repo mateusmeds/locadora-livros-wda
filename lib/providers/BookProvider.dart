@@ -9,8 +9,11 @@ import 'package:livraria_wda/providers/PublisherProvider.dart';
 
 class BookProvider with ChangeNotifier {
   List<Book> _books = [];
+  List<Book> _booksSearch = [];
 
   List<Book> get books => _books;
+
+  List<Book> get booksSearch => _booksSearch;
 
   Future<void> loadBooks() async {
     _books.clear();
@@ -41,6 +44,19 @@ class BookProvider with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void filterBooks({String text = ""}) {
+    print(text);
+    if (text.isNotEmpty) {
+      _booksSearch = _books
+          .where((book) =>
+              book.author.toLowerCase().contains(text.toLowerCase()) ||
+              book.name.toLowerCase().contains(text.toLowerCase()) ||
+              book.releaseYear.toString().contains(text.toLowerCase()) ||
+              book.publisher.name.toLowerCase().contains(text.toLowerCase()))
+          .toList();
+    }
   }
 
   Future<void> loadAvailableBooks() async {
@@ -88,7 +104,6 @@ class BookProvider with ChangeNotifier {
       1,
     );
   }
-
 
   Future<void> saveBook(Map<String, Object> data, Publisher pub) {
     final int bookId = int.parse(data['id'].toString());
@@ -149,7 +164,8 @@ class BookProvider with ChangeNotifier {
 
       notifyListeners();
     } else if (response.statusCode == 400) {
-      throw HttpException(jsonDecode(utf8.decode(response.body.codeUnits))['error']);
+      throw HttpException(
+          jsonDecode(utf8.decode(response.body.codeUnits))['error']);
     } else {
       throw const HttpException(
         'Ocorreu um erro ao tentar salvar o livro.',
@@ -187,7 +203,8 @@ class BookProvider with ChangeNotifier {
 
         notifyListeners();
       } else if (response.statusCode == 400) {
-        throw HttpException(jsonDecode(utf8.decode(response.body.codeUnits))['error']);
+        throw HttpException(
+            jsonDecode(utf8.decode(response.body.codeUnits))['error']);
       } else {
         throw const HttpException(
           'Ocorreu um erro ao tentar salvar o livro.',
@@ -226,7 +243,8 @@ class BookProvider with ChangeNotifier {
         _books.remove(_books[index]);
         notifyListeners();
       } else if (response.statusCode == 400) {
-        throw HttpException(jsonDecode(utf8.decode(response.body.codeUnits))['error']);
+        throw HttpException(
+            jsonDecode(utf8.decode(response.body.codeUnits))['error']);
       } else {
         throw const HttpException(
           'Ocorreu um erro ao tentar remover o livro.',

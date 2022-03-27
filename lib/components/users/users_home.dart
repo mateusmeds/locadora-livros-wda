@@ -19,6 +19,11 @@ class _UsersHomeState extends State<UsersHome> {
   bool _isLoading = true;
   bool _isError = false;
 
+  String filterText = "";
+
+  Icon customIcon = const Icon(Icons.search);
+  Widget customSearchBar = const Text('Usuários');
+
   @override
   void initState() {
     super.initState();
@@ -40,10 +45,53 @@ class _UsersHomeState extends State<UsersHome> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final List<User> list =
+        filterText.isEmpty ? userProvider.users : userProvider.usersSearch;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de usuários'),
+        title: customSearchBar,
+        actions: [
+          IconButton(
+            icon: customIcon,
+            onPressed: () {
+              setState(() {
+                if (customIcon.icon == Icons.search) {
+                  customSearchBar = ListTile(
+                    title: TextField(
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                          hintText: 'Pesquisar...',
+                          hintStyle: TextStyle(
+                            color: Colors.white60,
+                            fontSize: 18,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          contentPadding: EdgeInsets.all(0)),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                      onChanged: (text) {
+                        setState(() {
+                          filterText = text;
+                          userProvider.filterUsers(text: text);
+                        });
+                      },
+                    ),
+                  );
+                  customIcon = const Icon(Icons.cancel);
+                } else {
+                  customIcon = const Icon(Icons.search);
+                  customSearchBar = const Text('Usuários');
+                  filterText = "";
+                }
+              });
+            },
+          )
+        ],
       ),
       body: _isLoading
           ? const Center(
@@ -51,12 +99,14 @@ class _UsersHomeState extends State<UsersHome> {
             )
           : Column(
               children: [
-                _isError
-                    ? ListEmptyMessage(
-                        message: 'Nenhum usuário encontrado.',
-                        icon: Icons.person,
-                      )
-                    : UserList(userProvider.users),
+                Visibility(
+                  visible: !_isError && list.length > 0,
+                  child: UserList(list),
+                  replacement: ListEmptyMessage(
+                    message: 'Nenhum usuário encontrado.',
+                    icon: Icons.person,
+                  ),
+                ),
               ],
             ),
       floatingActionButton: FloatingActionButton(
