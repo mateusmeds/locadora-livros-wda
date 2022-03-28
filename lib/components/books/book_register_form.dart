@@ -46,9 +46,6 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
     final publisherProvider = Provider.of<PublisherProvider>(context);
 
     Future<void> _submitForm() async {
-      print('obj');
-      print(_selectedPublisher.toString());
-
       if (_selectedPublisher == null) {
         publisherIsSelected = false;
       }
@@ -203,7 +200,6 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                           _dropDownItemSelected(newValue!);
                           setState(() {
                             _selectedPublisher = newValue;
-                            print(_selectedPublisher);
                           });
                         },
                         value: _selectedPublisher,

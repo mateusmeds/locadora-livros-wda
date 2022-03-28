@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:livraria_wda/components/books_rent/book_rent_single.dart';
 import 'package:livraria_wda/models/book_rent.dart';
+import 'package:provider/provider.dart';
 import 'package:show_status_container/show_status_container.dart';
+
+import '../../providers/BookRentProvider.dart';
 
 class BooksRentList extends StatelessWidget {
   final List<BookRent> booksRent;
@@ -10,6 +15,8 @@ class BooksRentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final msg = ScaffoldMessenger.of(context);
+
     return Expanded(
       child: ListView.builder(
         itemCount: booksRent.length,
@@ -52,15 +59,14 @@ class BooksRentList extends StatelessWidget {
             child: Card(
               color: Colors.grey[300],
               elevation: 5,
-              child: ListTile(
-                //espaçamento interno
-                contentPadding: const EdgeInsets.only(
+              child: ExpansionTile(
+                textColor: Colors.black,
+                tilePadding: const EdgeInsets.only(
                   top: 10,
                   bottom: 5,
                   left: 8,
                   right: 8,
                 ),
-                //avatar
                 leading: const CircleAvatar(
                   radius: 30,
                   child: Icon(
@@ -68,15 +74,6 @@ class BooksRentList extends StatelessWidget {
                     size: 35,
                   ),
                 ),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => BookRentSingle(
-                        bookRent: bookRent,
-                      ),
-                    ),
-                  );
-                },
                 title: Text(
                   bookRent.book.name,
                   style: const TextStyle(overflow: TextOverflow.ellipsis),
@@ -130,6 +127,233 @@ class BooksRentList extends StatelessWidget {
                     ),
                   ],
                 ),
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 7),
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.grey[350],
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.email,
+                          color: Colors.black54,
+                        ),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: Text(
+                            bookRent.user.email,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 7),
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.grey[350],
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Colors.black54,
+                        ),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: Text(
+                            'Data de aluguel: ${DateFormat('dd/MM/y').format(rentalDate)}',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 7),
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.grey[350],
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Colors.black54,
+                        ),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: Text(
+                            'Data de previsão: ${DateFormat('dd/MM/y').format(previsionDate)}',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 7),
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.grey[350],
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Colors.black54,
+                        ),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: Text(
+                            'Data de devolução: $devolutionDate',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: bookRent.devolutionDate == 'null',
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          FloatingActionButton.extended(
+                            icon: const Icon(Icons.clear),
+                            backgroundColor: Colors.red[400],
+                            label: Text(
+                              'Cancelar',
+                            ),
+                            onPressed: () {
+                              showDialog<bool>(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: const Text('Cancelar Aluguel'),
+                                  content: const Text('Tem certeza?'),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('Não'),
+                                      onPressed: () =>
+                                          Navigator.of(ctx).pop(false),
+                                    ),
+                                    TextButton(
+                                        child: const Text('Sim'),
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop(true);
+                                        }),
+                                  ],
+                                ),
+                              ).then((value) async {
+                                if (value ?? false) {
+                                  try {
+                                    await Provider.of<BookRentProvider>(
+                                      context,
+                                      listen: false,
+                                    ).removeBookRental(bookRent).then((value) {
+                                      msg.showSnackBar(
+                                        SnackBar(
+                                          content: const Text(
+                                            'Aluguel cancelado com sucesso.',
+                                            style: TextStyle(fontSize: 17),
+                                          ),
+                                          backgroundColor: Colors.green[400],
+                                          duration: const Duration(seconds: 5),
+                                        ),
+                                      );
+                                    });
+                                  } on HttpException catch (error) {
+                                    msg.showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          error.toString().replaceAll(
+                                              'HttpException: ', 'Erro: '),
+                                          style: const TextStyle(fontSize: 17),
+                                        ),
+                                        backgroundColor: Colors.red[400],
+                                        duration: const Duration(seconds: 5),
+                                      ),
+                                    );
+                                  } finally {}
+                                }
+                              });
+                            },
+                            heroTag: null,
+                          ),
+                          FloatingActionButton.extended(
+                            label: Text('Devolver'),
+                            icon: Icon(Icons.check),
+                            onPressed: () {
+                              showDialog<bool>(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: const Text('Devolver Livro'),
+                                  content: const Text('Tem certeza?'),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('Não'),
+                                      onPressed: () =>
+                                          Navigator.of(ctx).pop(false),
+                                    ),
+                                    TextButton(
+                                        child: const Text('Sim'),
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop(true);
+                                        }),
+                                  ],
+                                ),
+                              ).then((value) async {
+                                if (value ?? false) {
+                                  try {
+                                    await Provider.of<BookRentProvider>(
+                                      context,
+                                      listen: false,
+                                    ).returnBook(bookRent).then((value) {
+                                      //Navigator.of(context).pop();
+                                      msg.showSnackBar(
+                                        SnackBar(
+                                          content: const Text(
+                                            'Livro devolvido com sucesso.',
+                                            style: TextStyle(fontSize: 17),
+                                          ),
+                                          backgroundColor: Colors.green[400],
+                                          duration: const Duration(seconds: 5),
+                                        ),
+                                      );
+                                    });
+                                  } on HttpException catch (error) {
+                                    msg.showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          error.toString().replaceAll(
+                                              'HttpException: ', 'Erro: '),
+                                          style: const TextStyle(fontSize: 17),
+                                        ),
+                                        backgroundColor: Colors.red[400],
+                                        duration: const Duration(seconds: 5),
+                                      ),
+                                    );
+                                  }
+                                }
+                              });
+                            },
+                            heroTag: null,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  )
+                ],
               ),
             ),
           );

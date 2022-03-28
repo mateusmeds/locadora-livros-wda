@@ -42,7 +42,6 @@ class PublisherProvider with ChangeNotifier {
   }
 
   void filterPublishers({String text = ""}) {
-    print(text);
     if (text.isNotEmpty) {
       _publishersSearch = _publishers
           .where((publisher) =>
@@ -128,8 +127,6 @@ class PublisherProvider with ChangeNotifier {
           },
         ),
       );
-
-      print(jsonDecode(response.body));
 
       if (response.statusCode == 200) {
         _publishers[index] = publisher;

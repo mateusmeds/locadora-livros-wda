@@ -47,7 +47,6 @@ class BookProvider with ChangeNotifier {
   }
 
   void filterBooks({String text = ""}) {
-    print(text);
     if (text.isNotEmpty) {
       _booksSearch = _books
           .where((book) =>
@@ -236,8 +235,6 @@ class BookProvider with ChangeNotifier {
           },
         ),
       );
-
-      //print(jsonDecode(response.body));
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         _books.remove(_books[index]);

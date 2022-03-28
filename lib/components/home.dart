@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:livraria_wda/components/dashboardItem.dart';
+import 'package:livraria_wda/components/devolution_of_books.dart';
+import 'package:livraria_wda/components/devolution_of_books_status.dart';
 import 'package:livraria_wda/components/menu_drawer.dart';
 import 'package:livraria_wda/components/most_rented_books.dart';
 import 'package:livraria_wda/providers/dashboard_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class MostRentedBooks extends StatelessWidget {
   final List<MostRentedBooksData> data;
@@ -18,14 +19,67 @@ class MostRentedBooks extends StatelessWidget {
       primaryXAxis: CategoryAxis(),
       primaryYAxis: NumericAxis(minimum: 0),
       title: ChartTitle(text: 'Livros Mais Alugados'),
-      tooltipBehavior: TooltipBehavior(enable: true,),
+      tooltipBehavior: TooltipBehavior(
+        enable: true,
+      ),
       series: <ChartSeries<MostRentedBooksData, String>>[
         ColumnSeries<MostRentedBooksData, String>(
-            dataSource: data,
-            xValueMapper: (MostRentedBooksData data, _) => data.bookName,
-            yValueMapper: (MostRentedBooksData data, _) => data.totalRented,
-            name: 'Gold',
-            color: Color.fromRGBO(8, 142, 255, 1))
+          dataSource: data,
+          xValueMapper: (MostRentedBooksData data, _) => data.bookName,
+          yValueMapper: (MostRentedBooksData data, _) => data.totalRented,
+          name: 'Livro',
+          color: Colors.green,
+        )
+      ],
+    );
+  }
+}
+
+class DevolutionOfBooks extends StatelessWidget {
+  final List<DevolutionOfBooksData> data;
+
+  const DevolutionOfBooks({Key? key, required this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SfCircularChart(
+      title: ChartTitle(text: 'Resumo de Aluguéis'),
+      tooltipBehavior: TooltipBehavior(
+        enable: true,
+      ),
+      series: <CircularSeries>[
+        DoughnutSeries<DevolutionOfBooksData, String>(
+          dataSource: data,
+          pointColorMapper: (DevolutionOfBooksData data, _) => data.color,
+          xValueMapper: (DevolutionOfBooksData data, _) => data.label,
+          yValueMapper: (DevolutionOfBooksData data, _) => data.totalBooks,
+        )
+      ],
+    );
+  }
+}
+
+class DevolutionOfBooksStatus extends StatelessWidget {
+  final List<DevolutionOfBooksStatusData> data;
+
+  const DevolutionOfBooksStatus({Key? key, required this.data})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SfCircularChart(
+      title: ChartTitle(text: 'Resumo de Aluguéis - Status'),
+      tooltipBehavior: TooltipBehavior(
+        enable: true,
+      ),
+      series: <CircularSeries>[
+        DoughnutSeries<DevolutionOfBooksStatusData, String>(
+          dataSource: data,
+          pointColorMapper: (DevolutionOfBooksStatusData data, _) => data.color,
+          xValueMapper: (DevolutionOfBooksStatusData data, _) => data.label,
+          yValueMapper: (DevolutionOfBooksStatusData data, _) =>
+              data.totalBooks,
+        )
       ],
     );
   }
@@ -156,15 +210,39 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
-            _isLoadingBooks
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                    ),
-                  )
-                : MostRentedBooks(
-                    data: provider.mostRentedBooks,
-                  ),
+            Visibility(
+              visible: !_isLoadingBooks,
+              child: MostRentedBooks(
+                data: provider.mostRentedBooks,
+              ),
+              replacement: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Visibility(
+              visible: !_isLoadingBooksRent,
+              child: DevolutionOfBooks(
+                data: provider.devolutionOfBooks(),
+              ),
+              replacement: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Visibility(
+              visible: !_isLoadingBooksRent,
+              child: DevolutionOfBooksStatus(
+                data: provider.devolutionOfBooksStatus(),
+              ),
+              replacement: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ],
         ),
       ),

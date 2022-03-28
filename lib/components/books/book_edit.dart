@@ -53,9 +53,6 @@ class _BookEditFormState extends State<BookEditForm> {
     final publisherProvider = Provider.of<PublisherProvider>(context);
 
     Future<void> _submitForm() async {
-      print('obj');
-      print(_selectedPublisher);
-
       if (_selectedPublisher == null) {
         publisherIsSelected = false;
       }
@@ -216,7 +213,6 @@ class _BookEditFormState extends State<BookEditForm> {
                           _dropDownItemSelected(newValue!);
                           setState(() {
                             _selectedPublisher = newValue;
-                            print(_selectedPublisher);
                           });
                         },
                         value: _selectedPublisher,

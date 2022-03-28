@@ -29,7 +29,7 @@ class BookRentProvider with ChangeNotifier {
           jsonDecode(utf8.decode(response.body.codeUnits));
 
       for (var bookRent in booksRentalData) {
-        _booksRental.add(BookRent(
+        BookRent bookRentObj = BookRent(
           bookRent['id'],
           User(
             bookRent['usuario_id']['id'],
@@ -54,7 +54,9 @@ class BookRentProvider with ChangeNotifier {
           bookRent['data_aluguel'],
           bookRent['data_previsao'],
           bookRent['data_devolucao'].toString(),
-        ));
+        );
+        setStatus(bookRentObj);
+        _booksRental.add(bookRentObj);
       }
 
       notifyListeners();
@@ -62,6 +64,42 @@ class BookRentProvider with ChangeNotifier {
       return true;
     }
     return false;
+  }
+
+  void setStatus(BookRent bookRent) {
+    DateTime previsionDate;
+    DateTime rentalDate;
+
+    try {
+      previsionDate = DateFormat('y-MM-dd').parse(bookRent.previsionDate);
+      rentalDate = DateFormat('y-MM-dd').parse(bookRent.rentalDate);
+    } catch (e) {
+      previsionDate = DateFormat('dd/MM/y').parse(bookRent.previsionDate);
+      rentalDate = DateFormat('dd/MM/y').parse(bookRent.rentalDate);
+    }
+
+    var devolutionDate = '';
+
+    ///Controla se o prazo de entrega do livro foi ultrapassado
+    bool returnedBookDelayed = false;
+
+    if (bookRent.devolutionDate != '' && bookRent.devolutionDate != 'null') {
+      final DateTime devolutionDateParse =
+          DateFormat('y-MM-dd').parse(bookRent.devolutionDate);
+
+      //Verifica se o livro foi entregue atrasado
+      if (devolutionDateParse.difference(previsionDate).inDays > 0) {
+        returnedBookDelayed = true;
+      }
+
+      devolutionDate = DateFormat('dd/MM/y').format(devolutionDateParse);
+    } else if (DateTime.now().difference(previsionDate).inDays > 0) {
+      returnedBookDelayed = true;
+    }
+
+    bookRent.returned =
+        bookRent.devolutionDate == 'null' ? 'Não devolvido' : 'Devolvido';
+    bookRent.status = !returnedBookDelayed ? 'No prazo' : 'Atrasado';
   }
 
   void filterBooksRent({String text = ""}) {
@@ -75,6 +113,10 @@ class BookRentProvider with ChangeNotifier {
               bookRental.devolutionDate
                   .toLowerCase()
                   .contains(text.toLowerCase()) ||
+              bookRental.returned
+                  .toLowerCase()
+                  .startsWith(text.toLowerCase()) ||
+              bookRental.status.toLowerCase().startsWith(text.toLowerCase()) ||
               bookRental.previsionDate
                   .toString()
                   .contains(text.toLowerCase()) ||
@@ -101,28 +143,8 @@ class BookRentProvider with ChangeNotifier {
     );
   }
 
-  // Future<Publisher> getPublisher(int id) async {
-  //   final response = await http.get(
-  //     Uri.parse('http://livraria--back.herokuapp.com/api/editora/$id'),
-  //     headers: {'content-type': 'application/json'},
-  //   );
-
-  //   print(jsonDecode(response.body));
-
-  //   if (response.statusCode == 200) {
-  //     var publisherData = jsonDecode(response.body);
-  //     return Publisher(
-  //       publisherData['id'],
-  //       publisherData['nome'],
-  //       publisherData['cidade'],
-  //     );
-  //   }
-
-  //   return Publisher(-100, '@anonimo', '@anonimo');
-  // }
-
   Future<void> saveBookRental(Map<String, Object> data, Book book, User user) {
-    final bookRental = BookRent(
+    BookRent bookRental = BookRent(
       0,
       user,
       book,
@@ -130,7 +152,6 @@ class BookRentProvider with ChangeNotifier {
       data['previsionDate'].toString(),
       'null',
     );
-
     return addBookRental(bookRental);
   }
 
@@ -176,15 +197,18 @@ class BookRentProvider with ChangeNotifier {
     if (response.statusCode == 200) {
       //Pegando id do aluguel cadastrado
       final bookRentalId = jsonDecode(response.body)['id'];
-
-      _booksRental.add(BookRent(
+      BookRent bookRent = BookRent(
         bookRentalId,
         bookRental.user,
         bookRental.book,
         bookRental.rentalDate,
         bookRental.previsionDate,
         bookRental.devolutionDate,
-      ));
+      );
+
+      setStatus(bookRent);
+
+      _booksRental.add(bookRent);
 
       notifyListeners();
     } else if (response.statusCode == 400) {
@@ -227,9 +251,8 @@ class BookRentProvider with ChangeNotifier {
         body: jsonEncode(
           {
             "data_aluguel": rentalDateFormatString,
-            "data_devolucao": DateFormat('y-MM-dd')
-                .format(DateTime.now().add(const Duration(hours: 3)))
-                .toString(),
+            "data_devolucao":
+                DateFormat('y-MM-dd').format(DateTime.now()).toString(),
             "data_previsao": previsionDateFormatString,
             "id": bookRental.id,
             "livro_id": {
@@ -260,6 +283,7 @@ class BookRentProvider with ChangeNotifier {
         bookRental.devolutionDate = DateFormat('y-MM-dd')
             .format(DateTime.now().add(const Duration(hours: 3)))
             .toString();
+        setStatus(bookRental);
         _booksRental[index] = bookRental;
 
         notifyListeners();

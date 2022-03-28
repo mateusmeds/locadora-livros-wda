@@ -162,7 +162,7 @@ packages:
       path: "."
       ref: HEAD
       resolved-ref: "26834a4fcbc834663af37eb0fc0c0f83965417f8"
-      url: "git@github.com:mateusmeds/show_status_container_package.git"
+      url: "https://github.com/mateusmeds/show_status_container_package.git"
     source: git
     version: "0.0.1"
   sky_engine:

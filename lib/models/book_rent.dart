@@ -8,6 +8,8 @@ class BookRent {
   String _rentalDate;
   String _previsionDate;
   String? _devolutionDate;
+  String returned;
+  String status;
 
   BookRent(
     this._id,
@@ -15,8 +17,10 @@ class BookRent {
     this._book,
     this._rentalDate,
     this._previsionDate,
-    this._devolutionDate,
-  );
+    this._devolutionDate, {
+    this.returned = "",
+    this.status = "",
+  });
 
   set devolutionDate(String value) {
     _devolutionDate = value;

@@ -234,7 +234,6 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
                           _dropDownBookItemSelected(newValue!);
                           setState(() {
                             _selectedBook = newValue;
-                            print(_selectedBook);
                           });
                         },
                         value: _selectedBook,
@@ -291,7 +290,6 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
                           _dropDownUserItemSelected(newValue!);
                           setState(() {
                             _selectedUser = newValue;
-                            print(_selectedUser);
                           });
                         },
                         value: _selectedUser,

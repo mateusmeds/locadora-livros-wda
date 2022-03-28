@@ -48,7 +48,6 @@ class UserProvider with ChangeNotifier {
   }
 
   void filterUsers({String text = ""}) {
-    print(text);
     if (text.isNotEmpty) {
       _usersSearch = _users
           .where((user) =>
