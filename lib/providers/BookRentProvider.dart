@@ -106,6 +106,7 @@ class BookRentProvider with ChangeNotifier {
     if (text.isNotEmpty) {
       _booksRentSearch = _booksRental
           .where((bookRental) =>
+              bookRental.user.name.toLowerCase().contains(text.toLowerCase()) ||
               bookRental.book.name.toLowerCase().contains(text.toLowerCase()) ||
               bookRental.book.publisher.name
                   .toLowerCase()
