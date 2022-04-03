@@ -198,6 +198,7 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
                       const SizedBox(height: 20),
                       //Lista de livros
                       DropdownButton<String>(
+                        menuMaxHeight: 200,
                         hint: Container(
                           margin: const EdgeInsets.only(left: 10),
                           child: Row(
@@ -254,6 +255,7 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
                       const SizedBox(height: 10),
                       //Lista de usuários
                       DropdownButton<String>(
+                        menuMaxHeight: 200,
                         hint: Container(
                           margin: const EdgeInsets.only(left: 10),
                           child: Row(

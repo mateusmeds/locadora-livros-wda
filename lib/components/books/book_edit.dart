@@ -176,6 +176,7 @@ class _BookEditFormState extends State<BookEditForm> {
                         initialValue: widget.book.name,
                       ),
                       DropdownButton<String>(
+                        menuMaxHeight: 200,
                         hint: Container(
                           margin: EdgeInsets.only(left: 10),
                           child: Row(

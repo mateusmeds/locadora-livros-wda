@@ -163,6 +163,7 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                         },
                       ),
                       DropdownButton<String>(
+                        menuMaxHeight: 200,
                         hint: Container(
                           margin: const EdgeInsets.only(left: 12),
                           child: Row(
