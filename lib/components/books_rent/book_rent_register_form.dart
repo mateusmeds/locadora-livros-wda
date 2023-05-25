@@ -355,9 +355,9 @@ class _BookRentRegisterFormState extends State<BookRentRegisterForm> {
                           showDatePicker(
                             context: context,
                             initialDate:
-                                DateTime.now().add(const Duration(hours: 3)),
+                                DateTime.now().add(const Duration(days: 1)),
                             firstDate:
-                                DateTime.now().add(const Duration(hours: 3)),
+                                DateTime.now().add(const Duration(days: 1)),
                             lastDate:
                                 DateTime.now().add(const Duration(days: 30)),
                           ).then((pickedDate) {

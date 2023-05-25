@@ -19,7 +19,7 @@ class BookProvider with ChangeNotifier {
     _books.clear();
 
     final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/livros'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/livros'),
       headers: {'content-type': 'application/json'},
     );
 
@@ -62,7 +62,7 @@ class BookProvider with ChangeNotifier {
     _books.clear();
 
     final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/disponiveis'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/disponiveis'),
       headers: {'content-type': 'application/json'},
     );
 
@@ -128,7 +128,7 @@ class BookProvider with ChangeNotifier {
 
   Future<void> addBook(Book book) async {
     final response = await http.post(
-      Uri.parse('http://livraria--back.herokuapp.com/api/livro'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/livro'),
       headers: {'content-type': 'application/json'},
       body: jsonEncode(
         {
@@ -178,7 +178,7 @@ class BookProvider with ChangeNotifier {
 
     if (index >= 0) {
       final response = await http.put(
-        Uri.parse('http://livraria--back.herokuapp.com/api/livro'),
+        Uri.parse('http://wdaw.hopto.org:8185/api/livro'),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(
           {
@@ -217,7 +217,7 @@ class BookProvider with ChangeNotifier {
 
     if (index >= 0) {
       final response = await http.delete(
-        Uri.parse('http://livraria--back.herokuapp.com/api/livro'),
+        Uri.parse('http://wdaw.hopto.org:8185/api/livro'),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(
           {

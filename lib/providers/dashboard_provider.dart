@@ -47,7 +47,7 @@ class DashboardProvider with ChangeNotifier {
 
     List<dynamic> booksData = [];
     final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/livros'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/livros'),
       headers: {'content-type': 'application/json'},
     );
 
@@ -69,7 +69,7 @@ class DashboardProvider with ChangeNotifier {
     _booksRent.clear();
     List<dynamic> booksRentData = [];
     final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/alugueis'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/alugueis'),
       headers: {'content-type': 'application/json'},
     );
 
@@ -113,7 +113,7 @@ class DashboardProvider with ChangeNotifier {
   Future<void> loadUsers() async {
     List<dynamic> usersData = [];
     final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/usuarios'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/usuarios'),
       headers: {'content-type': 'application/json'},
     );
 
@@ -127,7 +127,7 @@ class DashboardProvider with ChangeNotifier {
   Future<void> loadPublishers() async {
     List<dynamic> publishersData = [];
     final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/editoras'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/editoras'),
       headers: {'content-type': 'application/json'},
     );
 

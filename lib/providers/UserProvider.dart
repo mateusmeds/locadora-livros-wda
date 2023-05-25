@@ -22,7 +22,7 @@ class UserProvider with ChangeNotifier {
     users.clear();
 
     final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/usuarios'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/usuarios'),
       headers: {'content-type': 'application/json'},
     );
 
@@ -83,7 +83,7 @@ class UserProvider with ChangeNotifier {
 
   Future<void> addUser(User user) async {
     final response = await http.post(
-      Uri.parse('http://livraria--back.herokuapp.com/api/usuario'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/usuario'),
       headers: {'content-type': 'application/json'},
       body: jsonEncode(
         {
@@ -137,7 +137,7 @@ class UserProvider with ChangeNotifier {
 
     if (index >= 0) {
       final response = await http.put(
-        Uri.parse('http://livraria--back.herokuapp.com/api/usuario'),
+        Uri.parse('http://wdaw.hopto.org:8185/api/usuario'),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(
           {
@@ -170,7 +170,7 @@ class UserProvider with ChangeNotifier {
 
     if (index >= 0) {
       final response = await http.delete(
-        Uri.parse('http://livraria--back.herokuapp.com/api/usuario'),
+        Uri.parse('http://wdaw.hopto.org:8185/api/usuario'),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(
           {

@@ -246,11 +246,18 @@ class _BookRegisterFormState extends State<BookRegisterForm> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Campo obrigatório.';
-                          } else if (value.length < 4) {
+                          }
+                          if (value.length < 4) {
                             return 'Precisa ser 4 Dígitos.';
-                          } else if (int.parse(value) > DateTime.now().year) {
+                          }
+                          int? year = int.tryParse(value);
+                          if (year == null) {
+                            return 'Formato inválido. Exemplos: 2021, 2020, 2019...';
+                          }
+                          if (year > DateTime.now().year) {
                             return 'O ano limite é ${DateTime.now().year}.';
                           }
+                          return null;
                         },
                       ),
                       TextFormField(

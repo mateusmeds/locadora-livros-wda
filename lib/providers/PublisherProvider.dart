@@ -17,7 +17,7 @@ class PublisherProvider with ChangeNotifier {
     _publishers.clear();
 
     final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/editoras'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/editoras'),
       headers: {'content-type': 'application/json'},
     );
 
@@ -78,7 +78,7 @@ class PublisherProvider with ChangeNotifier {
 
   Future<void> addPublisher(Publisher publisher) async {
     final response = await http.post(
-      Uri.parse('http://livraria--back.herokuapp.com/api/editora'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/editora'),
       headers: {'content-type': 'application/json'},
       body: jsonEncode(
         {
@@ -117,7 +117,7 @@ class PublisherProvider with ChangeNotifier {
 
     if (index >= 0) {
       final response = await http.put(
-        Uri.parse('http://livraria--back.herokuapp.com/api/editora'),
+        Uri.parse('http://wdaw.hopto.org:8185/api/editora'),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(
           {
@@ -149,7 +149,7 @@ class PublisherProvider with ChangeNotifier {
 
     if (index >= 0) {
       final response = await http.delete(
-        Uri.parse('http://livraria--back.herokuapp.com/api/editora'),
+        Uri.parse('http://wdaw.hopto.org:8185/api/editora'),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(
           {

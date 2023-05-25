@@ -15,9 +15,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Home()));
+    Timer(const Duration(seconds: 1), () {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     });
   }
 
@@ -36,8 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               Column(
                 children: const [
-                  Text('from',
-                      style: TextStyle(color: Colors.black38)),
+                  Text('from', style: TextStyle(color: Colors.black38)),
                   SizedBox(height: 5),
                   Text(
                     'Mateus Medeiros',

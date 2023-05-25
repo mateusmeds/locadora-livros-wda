@@ -20,7 +20,7 @@ class BookRentProvider with ChangeNotifier {
     _booksRental.clear();
 
     final response = await http.get(
-      Uri.parse('http://livraria--back.herokuapp.com/api/alugueis'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/alugueis'),
       headers: {'content-type': 'application/json'},
     );
 
@@ -163,7 +163,7 @@ class BookRentProvider with ChangeNotifier {
         DateFormat('dd/MM/y').parse(bookRental.previsionDate);
 
     final response = await http.post(
-      Uri.parse('http://livraria--back.herokuapp.com/api/aluguel'),
+      Uri.parse('http://wdaw.hopto.org:8185/api/aluguel'),
       headers: {'content-type': 'application/json'},
       body: jsonEncode(
         {
@@ -247,7 +247,7 @@ class BookRentProvider with ChangeNotifier {
 
     if (index >= 0) {
       final response = await http.put(
-        Uri.parse('http://livraria--back.herokuapp.com/api/aluguel'),
+        Uri.parse('http://wdaw.hopto.org:8185/api/aluguel'),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(
           {
@@ -321,7 +321,7 @@ class BookRentProvider with ChangeNotifier {
       previsionDateFormatString =
           DateFormat('y-MM-dd').format(previsionDateFormat);
       final response = await http.delete(
-        Uri.parse('http://livraria--back.herokuapp.com/api/aluguel'),
+        Uri.parse('http://wdaw.hopto.org:8185/api/aluguel'),
         headers: {'content-type': 'application/json'},
         body: jsonEncode(
           {
